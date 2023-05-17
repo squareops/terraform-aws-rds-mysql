@@ -13,35 +13,28 @@ Terraform module which creates RDS resources on AWS.
 
 ```hcl
 module "rds-mysql" {
-  source = "gitlab.com/sq-ia/aws/rds-mysql.git"
-  environment            = "production"
-  rds_instance_name       = "skaf"
-  allowed_cidr_blocks     = []
-  allowed_security_groups = ["sg-xyzf8bdc01fd9skaf"]
-  engine                  = "mysql"
-  engine_version          = local.mysql_engine_version
-  instance_class          = local.mysql_instance_class
-  allocated_storage       = 20
-  storage_encrypted       = true
-  kms_key_arn             = "arn:aws:kms:us-east-2:222222222222:key/kms_key_arn"
-  publicly_accessible     = false
-  master_username         = "admin"
+  source                  = "https://github.com/sq-ia/terraform-aws-rds-mysql.git"
+  vpc_id                  = "vpc-0d2c255df1f"
+  subnet_ids              = ["subnet-04cecf2400","subnet-0ac69f821"]
+  family                  = "mysql8.0
   db_name                 = "proddb"
-  port                    = 3306
   multi_az                = false
-  vpc_id                  = "vpc-xyz5ed733e273skaf"
-  subnet_ids              = ["subnet-xyz546125e075skaf","subnet-xyz8f0564e655skaf"]
-  apply_immediately       = true
-  random_password_length  = 20
-  skip_final_snapshot     = true 
-  final_snapshot_identifier_prefix = "prod-snapshot"
+  environment             = "prod"
+  kms_key_arn             = "arn:aws:kms:us-east-2:2222222222:key/a22ecc12-4-ae1be7590774"
+  engine_version          ="8.0.32"
+  instance_class          = "db.t3.medium"
+  master_username         = "admin"
+  allocated_storage       = 20
+  rds_instance_name       = "mysql"
+  major_engine_version    = "8.0"
+  allowed_security_groups = ["sg-0e2f946c67"]
+  publicly_accessible     = false
+  skip_final_snapshot              = true
+  backup_window                    = "03:00-06:00"
   snapshot_identifier              = null
   maintenance_window               = "Mon:00:00-Mon:03:00"
-  backup_window                    = "03:00-06:00"
-  backup_retention_period          = 7
-  family               = "mysql8.0"
-  major_engine_version = "8.0"
-  deletion_protection  = true
+  final_snapshot_identifier_prefix = "prod-snapshot"
+  deletion_protection              = true
 }
 
 ```
@@ -96,7 +89,7 @@ Security scanning is graciously provided by Prowler. Proowler is the leading ful
 | <a name="input_allowed_cidr_blocks"></a> [allowed\_cidr\_blocks](#input\_allowed\_cidr\_blocks) | A list of CIDR blocks which are allowed to access the database | `list(any)` | `[]` | no |
 | <a name="input_allowed_security_groups"></a> [allowed\_security\_groups](#input\_allowed\_security\_groups) | A list of Security Group ID's to allow access to | `list(any)` | `[]` | no |
 | <a name="input_apply_immediately"></a> [apply\_immediately](#input\_apply\_immediately) | Specifies whether any cluster modifications are applied immediately, or during the next maintenance window. | `bool` | `false` | no |
-| <a name="input_backup_retention_period"></a> [backup\_retention\_period](#input\_backup\_retention\_period) | The days to retain backups for | `number` | `null` | no |
+| <a name="input_backup_retention_period"></a> [backup\_retention\_period](#input\_backup\_retention\_period) | The days to retain backups for | `number` | `5` | no |
 | <a name="input_backup_window"></a> [backup\_window](#input\_backup\_window) | When to perform DB backups | `string` | `"03:00-06:00"` | no |
 | <a name="input_cloudwatch_log_group_retention_in_days"></a> [cloudwatch\_log\_group\_retention\_in\_days](#input\_cloudwatch\_log\_group\_retention\_in\_days) | The number of days to retain CloudWatch logs for the DB instance | `number` | `7` | no |
 | <a name="input_create_db_subnet_group"></a> [create\_db\_subnet\_group](#input\_create\_db\_subnet\_group) | Whether to create a database subnet group | `bool` | `true` | no |
@@ -105,21 +98,21 @@ Security scanning is graciously provided by Prowler. Proowler is the leading ful
 | <a name="input_deletion_protection"></a> [deletion\_protection](#input\_deletion\_protection) | provide accidental deletion protection | `bool` | `true` | no |
 | <a name="input_enable_general_log"></a> [enable\_general\_log](#input\_enable\_general\_log) | Whether or not to enable general logs in Cloudwatch | `bool` | `true` | no |
 | <a name="input_enable_slow_query_log"></a> [enable\_slow\_query\_log](#input\_enable\_slow\_query\_log) | Whether or not to enable slow query logs in Cloudwatch | `bool` | `true` | no |
-| <a name="input_engine"></a> [engine](#input\_engine) | The name of the database engine to be used for this DB cluster. | `string` | `""` | no |
+| <a name="input_engine"></a> [engine](#input\_engine) | The name of the database engine to be used for this DB cluster. | `string` | `"mysql"` | no |
 | <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | The database engine version. Updating this argument results in an outage. | `string` | `""` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Select enviroment type: dev, demo, prod | `string` | `"demo"` | no |
 | <a name="input_family"></a> [family](#input\_family) | Version of mysql DB family being created | `string` | `""` | no |
 | <a name="input_final_snapshot_identifier_prefix"></a> [final\_snapshot\_identifier\_prefix](#input\_final\_snapshot\_identifier\_prefix) | The name which is prefixed to the final snapshot on cluster destroy | `string` | `"final"` | no |
-| <a name="input_instance_class"></a> [instance\_class](#input\_instance\_class) | Instance type | `string` | `"db.m5.large"` | no |
-| <a name="input_kms_key_id"></a> [kms\_key\_id](#input\_kms\_key\_id) | The ARN for the KMS encryption key. If creating an encrypted replica, set this to the destination KMS ARN.  If storage\_encrypted is set to true and kms\_key\_id is not specified the default KMS key created in your account will be used | `string` | `null` | no |
+| <a name="input_instance_class"></a> [instance\_class](#input\_instance\_class) | Instance type | `string` | `""` | no |
+| <a name="input_kms_key_arn"></a> [kms\_key\_arn](#input\_kms\_key\_arn) | The ARN for the KMS encryption key. If creating an encrypted replica, set this to the destination KMS ARN.  If storage\_encrypted is set to true and kms\_key\_id is not specified the default KMS key created in your account will be used | `string` | `null` | no |
 | <a name="input_maintenance_window"></a> [maintenance\_window](#input\_maintenance\_window) | When to perform DB maintenance | `string` | `"Mon:00:00-Mon:03:00"` | no |
 | <a name="input_major_engine_version"></a> [major\_engine\_version](#input\_major\_engine\_version) | The database major engine version. Updating this argument results in an outage. | `string` | `""` | no |
 | <a name="input_master_username"></a> [master\_username](#input\_master\_username) | Create username for RDS primary cluster | `string` | `""` | no |
 | <a name="input_multi_az"></a> [multi\_az](#input\_multi\_az) | enable multi AZ for disaster Recovery | `bool` | `false` | no |
 | <a name="input_port"></a> [port](#input\_port) | port for database | `number` | `3306` | no |
 | <a name="input_publicly_accessible"></a> [publicly\_accessible](#input\_publicly\_accessible) | Publicly accessible to the internet | `bool` | `false` | no |
-| <a name="input_random_password_length"></a> [random\_password\_length](#input\_random\_password\_length) | (Optional) Length of random password to create. (default: 10) | `number` | `10` | no |
-| <a name="input_rds_instance_name"></a> [rds\_instance\_name](#input\_rds\_instance\_name) | RDS instance name | `string` | `"abc"` | no |
+| <a name="input_random_password_length"></a> [random\_password\_length](#input\_random\_password\_length) | (Optional) Length of random password to create. (default: 10) | `number` | `20` | no |
+| <a name="input_rds_instance_name"></a> [rds\_instance\_name](#input\_rds\_instance\_name) | RDS instance name | `string` | `""` | no |
 | <a name="input_replicate_source_db"></a> [replicate\_source\_db](#input\_replicate\_source\_db) | Specifies that this resource is a Replicate database, and to use this value as the source database. This correlates to the identifier of another Amazon RDS Database to replicate. | `string` | `null` | no |
 | <a name="input_skip_final_snapshot"></a> [skip\_final\_snapshot](#input\_skip\_final\_snapshot) | Determines whether a final DB snapshot is created before the DB instance is deleted. If true is specified, no DBSnapshot is created. If false is specified, a DB snapshot is created before the DB instance is deleted, using the value from final\_snapshot\_identifier | `bool` | `true` | no |
 | <a name="input_snapshot_identifier"></a> [snapshot\_identifier](#input\_snapshot\_identifier) | Specifies whether or not to create this database from a snapshot. This correlates to the snapshot ID you'd find in the RDS console, e.g: rds:production-2015-06-26-06-05. | `string` | `null` | no |

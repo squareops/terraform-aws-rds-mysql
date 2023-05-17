@@ -25,7 +25,7 @@ variable "apply_immediately" {
 variable "backup_retention_period" {
   description = "The days to retain backups for"
   type        = number
-  default     = null
+  default     = 5
 }
 
 variable "backup_window" {
@@ -78,7 +78,7 @@ variable "enable_general_log" {
 
 variable "engine" {
   description = "The name of the database engine to be used for this DB cluster."
-  default     = ""
+  default     = "mysql"
   type        = string
 }
 
@@ -163,7 +163,7 @@ variable "publicly_accessible" {
 variable "random_password_length" {
   description = "(Optional) Length of random password to create. (default: 10)"
   type        = number
-  default     = 10
+  default     = 20
 }
 
 variable "replicate_source_db" {
