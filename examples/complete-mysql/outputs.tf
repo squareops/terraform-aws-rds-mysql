@@ -1,39 +1,39 @@
 output "rds-mysql_instance_endpoint" {
-  description = "The connection endpoint rds-mysql"
+  description = "The endpoint for connecting to the database instance"
   value       = module.rds-mysql.db_instance_endpoint
 }
 
 output "rds-mysql_instance_username" {
-  description = "The master username for the database rds-mysql"
+  description = "The master username for accessing the database instance"
   value       = module.rds-mysql.db_instance_username
 }
 
 output "rds-mysql_instance_password" {
-  description = "The database password (this password may be old, because Terraform doesn't track it after initial creation) rds-mysql"
+  description = "The password for accessing the database instance (note: Terraform doesn't track changes to this password)"
   value       = module.rds-mysql.db_instance_password
 }
 
 output "rds-mysql_db_instance_name" {
-  description = "The database name"
+  description = "The name of the database instance"
   value       = module.rds-mysql.db_instance_name
 }
 
 output "rds-mysql_dedicated_security_group" {
-  description = "The security group ID of the cluster"
+  description = "The security group ID associated with the RDS cluster"
   value       = module.rds-mysql.rds_dedicated_security_group
 }
 
 output "rds-mysql_db_parameter_group_id" {
-  description = "The db parameter group id"
+  description = "The ID of the database parameter group"
   value       = module.rds-mysql.db_parameter_group_id
 }
 
 output "rds-mysql_db_subnet_group_id" {
-  description = "The db subnet group name"
+  description = "The ID of the database subnet group"
   value       = module.rds-mysql.db_subnet_group_id
 }
 
 output "rds-mysql_db_secret_arn" {
-  description = "ARN of the secret"
+  description = "The ARN (Amazon Resource Name) of the secret storing database credentials"
   value       = module.rds-mysql.db_secret_arn
 }

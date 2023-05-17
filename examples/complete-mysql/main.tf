@@ -33,6 +33,6 @@ module "rds-mysql" {
   backup_window                    = "03:00-06:00"
   snapshot_identifier              = null
   maintenance_window               = "Mon:00:00-Mon:03:00"
-  final_snapshot_identifier_prefix = "prod-snapshot"
   deletion_protection              = true
+  final_snapshot_identifier_prefix = "prod-snapshot"
 }
