@@ -23,7 +23,7 @@ Features
 
 ```hcl
 module "rds-mysql" {
-  source                  = "https://github.com/sq-ia/terraform-aws-rds-mysql.git"
+  source                  = "squareops/mysql-rds/terraform"
   vpc_id                  = "vpc-0d2c255df1f"
   subnet_ids              = ["subnet-04cecf2400","subnet-0ac69f821"]
   family                  = "mysql8.0
@@ -48,7 +48,7 @@ module "rds-mysql" {
 }
 
 ```
-Refer [examples](https://gitlab.com/squareops/sal/terraform/aws/rds-mysql/-/tree/qa/examples/complete-mysql) directory for more references.
+Refer [examples](https://github.com/squareops/terraform-aws-rds-mysql/-/tree/qa/examples/complete-mysql) directory for more references.
 
 
 ## Important Note
@@ -147,7 +147,7 @@ Security scanning is graciously provided by Prowler. Proowler is the leading ful
 
 To report an issue with a project:
 
-  1. Check the repository's [issue tracker](https://github.com/sq-ia/terraform-aws-rds-mysql/issues) on GitHub
+  1. Check the repository's [issue tracker](https://github.com/squareops/terraform-aws-rds-mysql/issues) on GitHub
   2. Search to check if the issue has already been reported
   3. If you can't find an answer to your question in the documentation or issue tracker, you can ask a question by creating a new issue. Make sure to provide enough context and details.
 
@@ -159,7 +159,7 @@ Apache License, Version 2.0, January 2004 (https://www.apache.org/licenses/LICEN
 
 To support our GitHub project by liking it, you can follow these steps:
 
-  1. Visit the repository: Navigate to the [GitHub repository](https://github.com/sq-ia/terraform-aws-rds-mysql)
+  1. Visit the repository: Navigate to the [GitHub repository](https://github.com/squareops/terraform-aws-rds-mysql)
 
   2. Click the "Star" button: On the repository page, you'll see a "Star" button in the upper right corner. Clicking on it will star the repository, indicating your support for the project.
 

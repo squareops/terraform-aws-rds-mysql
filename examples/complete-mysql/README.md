@@ -23,7 +23,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_rds-mysql"></a> [rds-mysql](#module\_rds-mysql) | git@github.com:sq-ia/terraform-aws-rds-mysql.git | n/a |
+| <a name="module_rds-mysql"></a> [rds-mysql](#module\_rds-mysql) | squareops/mysql-rds/terraform | n/a |
 
 ## Resources
 
