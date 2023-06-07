@@ -18,7 +18,7 @@ locals {
 }
 
 module "rds-mysql" {
-  source                           = "squareops/mysql-rds/terraform"
+  source                           = "squareops/rds-mysql/terraform"
   vpc_id                           = local.vpc_id
   subnet_ids                       = local.subnet_ids
   family                           = local.family

@@ -23,7 +23,7 @@ Features
 
 ```hcl
 module "rds-mysql" {
-  source                  = "squareops/mysql-rds/terraform"
+  source                  = "squareops/rds-mysql/terraform"
   vpc_id                  = "vpc-0d2c255df1f"
   subnet_ids              = ["subnet-04cecf2400","subnet-0ac69f821"]
   family                  = "mysql8.0
