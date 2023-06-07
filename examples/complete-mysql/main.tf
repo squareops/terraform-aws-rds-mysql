@@ -1,19 +1,24 @@
 locals {
-  name                    = "skaf"
+  name                    = "mysql"
   region                  = "us-east-1"
   family                  = "mysql8.0"
   vpc_id                  = "vpc-069a1a2f3a7"
-  subnet_ids              = ["subnet-0bb2803128ab", "subnet-0b543628666a"]
+  subnet_ids              = ["subnet-0bb2128ab", "subnet-0b548666a"]
   environment             = "prod"
   kms_key_arn             = "arn:aws:kms:us-east-1:2222222222:key/bcfdc1c5-241e-b467d90"
   mysql_instance_class    = "db.t3.medium"
   mysql_engine_version    = "8.0.32"
   major_engine_version    = "8.0"
   allowed_security_groups = ["sg-0e8dab08e40"]
+  additional_tags = {
+    Owner      = "Organization_Name"
+    Expires    = "Never"
+    Department = "Engineering"
+  }
 }
 
 module "rds-mysql" {
-  source                           = "git@github.com:sq-ia/terraform-aws-rds-mysql.git"
+  source                           = "squareops/rds-mysql/aws"
   vpc_id                           = local.vpc_id
   subnet_ids                       = local.subnet_ids
   family                           = local.family

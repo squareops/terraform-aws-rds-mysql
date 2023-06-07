@@ -8,20 +8,20 @@ module "db" {
   source                                 = "terraform-aws-modules/rds/aws"
   version                                = "5.1.0"
   identifier                             = format("%s-%s", var.environment, var.rds_instance_name)
+  db_name                                = var.db_name
+  username                               = var.master_username
+  port                                   = var.port
   engine                                 = var.engine
+  multi_az                               = var.multi_az
+  subnet_ids                             = var.subnet_ids
+  kms_key_id                             = var.kms_key_arn
   engine_version                         = var.engine_version
   instance_class                         = var.instance_class
   allocated_storage                      = var.allocated_storage
   storage_encrypted                      = var.storage_encrypted
-  kms_key_id                             = var.kms_key_arn
   publicly_accessible                    = var.publicly_accessible
   replicate_source_db                    = var.replicate_source_db
-  db_name                                = var.db_name
-  username                               = var.master_username
-  port                                   = var.port
-  multi_az                               = var.multi_az
   create_db_subnet_group                 = var.create_db_subnet_group
-  subnet_ids                             = var.subnet_ids
   vpc_security_group_ids                 = split(",", module.security_group_rds.security_group_id)
   skip_final_snapshot                    = var.skip_final_snapshot
   final_snapshot_identifier_prefix       = var.final_snapshot_identifier_prefix
@@ -66,8 +66,8 @@ resource "aws_security_group_rule" "default_ingress" {
   count                    = length(var.allowed_security_groups) > 0 ? length(var.allowed_security_groups) : 0
   description              = "From allowed SGs"
   type                     = "ingress"
-  from_port                = var.port
   to_port                  = var.port
+  from_port                = var.port
   protocol                 = "tcp"
   source_security_group_id = element(var.allowed_security_groups, count.index)
   security_group_id        = module.security_group_rds.security_group_id
@@ -77,8 +77,8 @@ resource "aws_security_group_rule" "cidr_ingress" {
   count             = length(var.allowed_cidr_blocks) > 0 ? length(var.allowed_cidr_blocks) : 0
   description       = "From allowed CIDRs"
   type              = "ingress"
-  from_port         = var.port
   to_port           = var.port
+  from_port         = var.port
   protocol          = "tcp"
   cidr_blocks       = element(var.allowed_cidr_blocks, count.index)
   security_group_id = module.security_group_rds.security_group_id
@@ -87,10 +87,10 @@ resource "aws_security_group_rule" "cidr_ingress" {
 module "security_group_rds" {
   source      = "terraform-aws-modules/security-group/aws"
   version     = "4.13.0"
-  create      = true
   name        = format("%s-%s-%s", var.environment, var.rds_instance_name, "rds-sg")
-  description = "Complete MySQL example security group"
+  create      = true
   vpc_id      = var.vpc_id
+  description = "Complete MySQL example security group"
   egress_with_cidr_blocks = [
     {
       from_port   = 0
