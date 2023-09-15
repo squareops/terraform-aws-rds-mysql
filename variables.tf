@@ -208,7 +208,6 @@ variable "vpc_id" {
   type        = string
 }
 
-<<<<<<< HEAD
 variable "enable_storage_autoscaling" {
   description = "Whether enable storage autoscaling or not"
   default     = false
@@ -243,7 +242,7 @@ variable "manage_master_user_password" {
   description = "Whether to manage master user password through service linked secret manager"
   default     = false
   type        = bool
-=======
+  }
 
 variable "disk_free_storage_space" {
   type        = string
@@ -297,5 +296,4 @@ variable "cw_sns_topic_arn" {
   description = "The username to use when sending notifications to Slack."
   default     = ""
   type        = string
->>>>>>> 5c8e7f8c119db7b65c7820efacafe0bac5aee7f2
 }
