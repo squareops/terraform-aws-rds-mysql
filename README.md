@@ -16,43 +16,20 @@ Features
   6. Maintenance Window: Configure a maintenance window for performing regular database maintenance tasks.
   7. Public Accessibility: Choose whether the database cluster should be publicly accessible over the internet.
   8. Replication: Replicate data from another Amazon RDS database by specifying the source database identifier.
-<<<<<<< HEAD
   9. Snapshot Restore: Restore the database from a specified snapshot ID to easily recreate database instances.
   10. VPC Support: Deploy the RDS cluster in a specific Virtual Private Cloud (VPC) and specify the associated subnets for network isolation.
-  11. Supports feature for storage autoscaling to avoid the storage bottleneck.
-=======
-    Snapshot Restore: Restore the database from a specified snapshot ID to easily recreate database instances.
-  9. VPC Support: Deploy the RDS cluster in a specific Virtual Private Cloud (VPC) and specify the associated subnets for network isolation.
-  10. CloudWatch Alerts: Set up CloudWatch alarms to monitor the health and performance of your Redis cluster. Integrate these alarms with AWS Simple Notification Service (SNS) to receive real-time alerts. Use AWS Lambda functions to customize your alerting logic, and send notifications to Slack channels for immediate visibility into your RDS MYSQL status.
->>>>>>> 5c8e7f8c119db7b65c7820efacafe0bac5aee7f2
+  11. CloudWatch Alerts: Set up CloudWatch alarms to monitor the health and performance of your Redis cluster. Integrate these alarms with AWS Simple Notification Service (SNS) to receive real-time alerts. Use AWS Lambda functions to customize your alerting logic, and send notifications to Slack channels for immediate visibility into your RDS MYSQL status.
+  12. Supports feature for storage autoscaling to avoid the storage bottleneck. 
 
 ## Usage Example
 
 ```hcl
 module "rds-mysql" {
-<<<<<<< HEAD
-  source                  = "squareops/rds-mysql/aws"
-  vpc_id                  = "vpc-0d2c255df1f"
-  replica_enable          = false
-  subnet_ids              = ["subnet-04cecf2400","subnet-0ac69f821"]
-  family                  = "mysql8.0
-  db_name                 = "proddb"
-  multi_az                = false
-  environment             = "prod"
-  kms_key_arn             = "arn:aws:kms:us-east-2:2222222222:key/a22ecc12-4-ae1be7590774"
-  engine_version          ="8.0.32"
-  instance_class          = "db.t3.medium"
-  master_username         = "admin"
-  allocated_storage       = 20
-  rds_instance_name       = "mysql"
-  major_engine_version    = "8.0"
-  allowed_security_groups = ["sg-0e2f946c67"]
-  publicly_accessible     = false
-=======
   source  = "squareops/rds-mysql/aws"
 
   name                             = "name"
   vpc_id                           = "vpc-0d2c255df1f"
+  replica_enable                   = false
   subnet_ids                       = ["subnet-04cecf2400","subnet-0ac69f821"]
   family                           = "mysql8.0
   db_name                          = "proddb"
@@ -67,7 +44,6 @@ module "rds-mysql" {
   major_engine_version             = "8.0"
   allowed_security_groups          = ["sg-0e2f946c67"]
   publicly_accessible              = false
->>>>>>> 5c8e7f8c119db7b65c7820efacafe0bac5aee7f2
   skip_final_snapshot              = true
   backup_window                    = "03:00-06:00"
   snapshot_identifier              = null
@@ -118,14 +94,13 @@ Security scanning is graciously provided by Prowler. Proowler is the leading ful
 
 | Name | Source | Version |
 |------|--------|---------|
-<<<<<<< HEAD
+| <a name="module_cw_sns_slack"></a> [cw\_sns\_slack](#module\_cw\_sns\_slack) | ./lambda | n/a |
 | <a name="module_db"></a> [db](#module\_db) | terraform-aws-modules/rds/aws | 6.1.0 |
 | <a name="module_db_replica"></a> [db\_replica](#module\_db\_replica) | terraform-aws-modules/rds/aws | 6.1.0 |
-=======
-| <a name="module_cw_sns_slack"></a> [cw\_sns\_slack](#module\_cw\_sns\_slack) | ./lambda | n/a |
-| <a name="module_db"></a> [db](#module\_db) | terraform-aws-modules/rds/aws | 5.1.0 |
->>>>>>> 5c8e7f8c119db7b65c7820efacafe0bac5aee7f2
 | <a name="module_security_group_rds"></a> [security\_group\_rds](#module\_security\_group\_rds) | terraform-aws-modules/security-group/aws | 4.13.0 |
+
+
+
 
 ## Resources
 
@@ -140,13 +115,10 @@ Security scanning is graciously provided by Prowler. Proowler is the leading ful
 | [aws_secretsmanager_secret_version.rds_credentials](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret_version) | resource |
 | [aws_security_group_rule.cidr_ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
 | [aws_security_group_rule.default_ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
-<<<<<<< HEAD
 | [random_password.master](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
-=======
 | [aws_sns_topic.slack_topic](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic) | resource |
 | [aws_sns_topic_subscription.slack-endpoint](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic_subscription) | resource |
 | [archive_file.lambdazip](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file) | data source |
->>>>>>> 5c8e7f8c119db7b65c7820efacafe0bac5aee7f2
 
 ## Inputs
 
