@@ -2,7 +2,10 @@ locals {
   name                    = "mysql"
   region                  = "us-east-2"
   family                  = "mysql8.0"
+  vpc_id                  = "vpc-06861ba817a8cda10"
+  subnet_ids              = ["subnet-09e8f6ea27b7e36d0", "subnet-0b070110454617a90"]
   environment             = "prod"
+  kms_key_arn             = ""
   mysql_instance_class    = "db.t3.medium"
   mysql_engine_version    = "8.0.32"
   major_engine_version    = "8.0"
@@ -100,8 +103,9 @@ module "vpc" {
 
 module "rds-mysql" {
   source                           = "squareops/rds-mysql/aws"
-  vpc_id                           = module.vpc.vpc_id
-  subnet_ids                       = module.vpc.database_subnets
+  name                             = local.name
+  vpc_id                           = local.vpc_id
+  subnet_ids                       = local.subnet_ids
   family                           = local.family
   max_allocated_storage            = 120
   db_name                          = "testdb"
@@ -122,4 +126,10 @@ module "rds-mysql" {
   maintenance_window               = "Mon:00:00-Mon:03:00"
   deletion_protection              = false
   final_snapshot_identifier_prefix = "prod-snapshot"
+  cloudwatch_metric_alarms_enabled = true
+  alarm_cpu_threshold_percent      = 70
+  disk_free_storage_space          = "10000000" # in bytes
+  slack_username                   = ""
+  slack_channel                    = ""
+  slack_webhook_url                = ""
 }
