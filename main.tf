@@ -156,7 +156,6 @@ resource "aws_secretsmanager_secret" "secret_master_db" {
   )
 }
 
-<<<<<<< HEAD
 resource "random_password" "master" {
   count   = var.manage_master_user_password ? 0 : 1
   length  = var.random_password_length
@@ -175,7 +174,7 @@ resource "aws_secretsmanager_secret_version" "rds_credentials" {
 }
 EOF
 }
-=======
+
 # Cloudwatch alarms
 resource "aws_cloudwatch_metric_alarm" "cache_cpu" {
   count               = var.cloudwatch_metric_alarms_enabled ? 1 : 0
@@ -310,4 +309,3 @@ resource "aws_lambda_permission" "sns_lambda_slack_invoke" {
   principal     = "sns.amazonaws.com"
   source_arn    = aws_sns_topic.slack_topic[0].arn
 }
->>>>>>> 5c8e7f8c119db7b65c7820efacafe0bac5aee7f2
