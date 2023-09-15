@@ -163,7 +163,7 @@ variable "publicly_accessible" {
 variable "random_password_length" {
   description = "The length of the randomly generated password. (default: 10)"
   type        = number
-  default     = 20
+  default     = 16
 }
 
 variable "replicate_source_db" {
@@ -200,4 +200,40 @@ variable "vpc_id" {
   description = "The ID of the VPC where the RDS cluster should be deployed"
   default     = ""
   type        = string
+}
+
+variable "enable_storage_autoscaling" {
+  description = "Whether enable storage autoscaling or not"
+  default     = false
+  type        = bool
+}
+
+variable "max_allocated_storage" {
+  description = "The Maximum storage capacity for the database value after autoscaling"
+  default     = null
+  type        = number
+}
+
+variable "storage_type" {
+  description = "The storage type for the database storage like gp2,gp3,io1"
+  default     = "gp2"
+  type        = string
+}
+
+variable "replica_enable" {
+  description = "Whether enable replica DB"
+  default     = false
+  type        = bool
+}
+
+variable "replica_count" {
+  description = "The number of replica instance"
+  default     = 1
+  type        = number
+}
+
+variable "manage_master_user_password" {
+  description = "Whether to manage master user password through service linked secret manager"
+  default     = false
+  type        = bool
 }

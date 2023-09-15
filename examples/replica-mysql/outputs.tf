@@ -3,9 +3,19 @@ output "rds-mysql_instance_endpoint" {
   value       = module.rds-mysql.db_instance_endpoint
 }
 
+output "rds-mysql_replica_instance_endpoint" {
+  description = "The endpoint for connecting to the database instance"
+  value       = module.rds-mysql.replica_db_instance_endpoint
+}
+
 output "rds-mysql_instance_username" {
   description = "The master username for accessing the database instance"
   value       = module.rds-mysql.db_instance_username
+}
+
+output "rds-mysql_replica_instance_id" {
+  description = "The master username for accessing the database instance"
+  value       = module.rds-mysql.replica_db_instance_address
 }
 
 output "rds-mysql_instance_password" {
@@ -16,6 +26,11 @@ output "rds-mysql_instance_password" {
 output "rds-mysql_db_instance_name" {
   description = "The name of the database instance"
   value       = module.rds-mysql.db_instance_name
+}
+
+output "rds-mysql_replica_db_instance_name" {
+  description = "The name of the database instance"
+  value       = module.rds-mysql.replica_db_instance_name
 }
 
 output "rds-mysql_dedicated_security_group" {

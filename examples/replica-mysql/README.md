@@ -1,4 +1,4 @@
-## MySQL Example
+## MySQL with Replica Example
 ![squareops_avatar]
 
 [squareops_avatar]: https://squareops.com/wp-content/uploads/2022/12/squareops-logo.png
@@ -17,24 +17,17 @@ This example will be very useful for users who are new to a module and want to q
 
 ## Providers
 
-| Name | Version |
-|------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.43.0 |
+No providers.
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_kms"></a> [kms](#module\_kms) | terraform-aws-modules/kms/aws | n/a |
-| <a name="module_rds-mysql"></a> [rds-mysql](#module\_rds-mysql) | squareops/rds-mysql/aws | n/a |
-| <a name="module_vpc"></a> [vpc](#module\_vpc) | squareops/vpc/aws | n/a |
+| <a name="module_rds-mysql"></a> [rds-mysql](#module\_rds-mysql) | squareops/mysql-rds/terraform | n/a |
 
 ## Resources
 
-| Name | Type |
-|------|------|
-| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
-| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
+No resources.
 
 ## Inputs
 
