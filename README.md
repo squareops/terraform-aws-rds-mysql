@@ -18,6 +18,7 @@ Features
   8. Replication: Replicate data from another Amazon RDS database by specifying the source database identifier.
     Snapshot Restore: Restore the database from a specified snapshot ID to easily recreate database instances.
   9. VPC Support: Deploy the RDS cluster in a specific Virtual Private Cloud (VPC) and specify the associated subnets for network isolation.
+  10. CloudWatch Alerts: Set up CloudWatch alarms to monitor the health and performance of your Redis cluster. Integrate these alarms with AWS Simple Notification Service (SNS) to receive real-time alerts. Use AWS Lambda functions to customize your alerting logic, and send notifications to Slack channels for immediate visibility into your RDS MYSQL status.
 
 ## Usage Example
 
