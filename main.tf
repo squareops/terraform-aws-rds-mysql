@@ -32,8 +32,6 @@ module "db" {
   backup_window                    = var.backup_window
   backup_retention_period          = var.backup_retention_period
   apply_immediately                = var.apply_immediately
-  # random_password_length                 = var.random_password_length
-  # create_random_password                 = var.create_random_password
   manage_master_user_password            = var.manage_master_user_password ? true : false
   monitoring_interval                    = "30"
   monitoring_role_name                   = format("%s-%s-RDSMySQL", var.rds_instance_name, var.environment)
@@ -149,9 +147,9 @@ module "security_group_rds" {
 }
 
 resource "aws_secretsmanager_secret" "secret_master_db" {
-  name = format("%s/%s/%s", var.environment, var.rds_instance_name, "rds-mysql-pass-update-new")
+  name = format("%s/%s/%s", var.environment, var.rds_instance_name, "rds-mysql-pass")
   tags = merge(
-    { "Name" = format("%s/%s/%s", var.environment, var.rds_instance_name, "rds-mysql-pass-update-new") },
+    { "Name" = format("%s/%s/%s", var.environment, var.rds_instance_name, "rds-mysql-pass") },
     local.tags,
   )
 }
