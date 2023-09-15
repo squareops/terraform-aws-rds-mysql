@@ -104,8 +104,8 @@ module "vpc" {
 module "rds-mysql" {
   source                           = "squareops/rds-mysql/aws"
   name                             = local.name
-  vpc_id                           = local.vpc_id
-  subnet_ids                       = local.subnet_ids
+  vpc_id                           = module.vpc.vpc_id
+  subnet_ids                       = module.vpc.database_subnets
   family                           = local.family
   max_allocated_storage            = 120
   db_name                          = "testdb"
