@@ -242,7 +242,7 @@ variable "manage_master_user_password" {
   description = "Whether to manage master user password through service linked secret manager"
   default     = false
   type        = bool
-  }
+}
 
 variable "disk_free_storage_space" {
   type        = string

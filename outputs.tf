@@ -18,16 +18,6 @@ output "replica_db_instance_name" {
   value       = module.db_replica[*].db_instance_identifier
 }
 
-# output "db_instance_id" {
-#   description = "The ID of the database instance"
-#   value       = module.db.db_instance_id
-# }
-
-# output "replica_db_instance_id" {
-#   description = "The ID of the replica database instance"
-#   value       = module.db_replica[*].db_instance_id
-# }
-
 output "replica_db_instance_address" {
   description = "The ID of the replica database instance"
   value       = module.db_replica[*].db_instance_address

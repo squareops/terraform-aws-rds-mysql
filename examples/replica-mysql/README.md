@@ -17,17 +17,24 @@ This example will be very useful for users who are new to a module and want to q
 
 ## Providers
 
-No providers.
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.43.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_rds-mysql"></a> [rds-mysql](#module\_rds-mysql) | squareops/mysql-rds/terraform | n/a |
+| <a name="module_kms"></a> [kms](#module\_kms) | terraform-aws-modules/kms/aws | n/a |
+| <a name="module_rds-mysql"></a> [rds-mysql](#module\_rds-mysql) | squareops/rds-mysql/aws | n/a |
+| <a name="module_vpc"></a> [vpc](#module\_vpc) | squareops/vpc/aws | n/a |
 
 ## Resources
 
-No resources.
+| Name | Type |
+|------|------|
+| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
 ## Inputs
 
@@ -45,4 +52,7 @@ No inputs.
 | <a name="output_rds-mysql_instance_endpoint"></a> [rds-mysql\_instance\_endpoint](#output\_rds-mysql\_instance\_endpoint) | The endpoint for connecting to the database instance |
 | <a name="output_rds-mysql_instance_password"></a> [rds-mysql\_instance\_password](#output\_rds-mysql\_instance\_password) | The password for accessing the database instance (note: Terraform doesn't track changes to this password) |
 | <a name="output_rds-mysql_instance_username"></a> [rds-mysql\_instance\_username](#output\_rds-mysql\_instance\_username) | The master username for accessing the database instance |
+| <a name="output_rds-mysql_replica_db_instance_name"></a> [rds-mysql\_replica\_db\_instance\_name](#output\_rds-mysql\_replica\_db\_instance\_name) | The name of the database instance |
+| <a name="output_rds-mysql_replica_instance_endpoint"></a> [rds-mysql\_replica\_instance\_endpoint](#output\_rds-mysql\_replica\_instance\_endpoint) | The endpoint for connecting to the database instance |
+| <a name="output_rds-mysql_replica_instance_id"></a> [rds-mysql\_replica\_instance\_id](#output\_rds-mysql\_replica\_instance\_id) | The master username for accessing the database instance |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

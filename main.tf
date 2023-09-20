@@ -5,33 +5,33 @@ locals {
 }
 
 module "db" {
-  source                           = "terraform-aws-modules/rds/aws"
-  version                          = "6.1.0"
-  identifier                       = format("%s-%s", var.environment, var.rds_instance_name)
-  db_name                          = var.db_name
-  password                         = var.manage_master_user_password ? null : random_password.master[0].result
-  username                         = var.master_username
-  port                             = var.port
-  engine                           = var.engine
-  multi_az                         = var.multi_az
-  subnet_ids                       = var.subnet_ids
-  kms_key_id                       = var.kms_key_arn
-  storage_type                     = var.storage_type
-  engine_version                   = var.engine_version
-  instance_class                   = var.instance_class
-  allocated_storage                = var.allocated_storage
-  max_allocated_storage            = var.enable_storage_autoscaling && var.max_allocated_storage != "" ? var.max_allocated_storage : null
-  storage_encrypted                = var.storage_encrypted
-  publicly_accessible              = var.publicly_accessible
-  create_db_subnet_group           = var.create_db_subnet_group
-  vpc_security_group_ids           = split(",", module.security_group_rds.security_group_id)
-  skip_final_snapshot              = var.skip_final_snapshot
-  final_snapshot_identifier_prefix = var.final_snapshot_identifier_prefix
-  snapshot_identifier              = var.snapshot_identifier
-  maintenance_window               = var.maintenance_window
-  backup_window                    = var.backup_window
-  backup_retention_period          = var.backup_retention_period
-  apply_immediately                = var.apply_immediately
+  source                                 = "terraform-aws-modules/rds/aws"
+  version                                = "6.1.0"
+  identifier                             = format("%s-%s", var.environment, var.rds_instance_name)
+  db_name                                = var.db_name
+  password                               = var.manage_master_user_password ? null : random_password.master[0].result
+  username                               = var.master_username
+  port                                   = var.port
+  engine                                 = var.engine
+  multi_az                               = var.multi_az
+  subnet_ids                             = var.subnet_ids
+  kms_key_id                             = var.kms_key_arn
+  storage_type                           = var.storage_type
+  engine_version                         = var.engine_version
+  instance_class                         = var.instance_class
+  allocated_storage                      = var.allocated_storage
+  max_allocated_storage                  = var.enable_storage_autoscaling && var.max_allocated_storage != "" ? var.max_allocated_storage : null
+  storage_encrypted                      = var.storage_encrypted
+  publicly_accessible                    = var.publicly_accessible
+  create_db_subnet_group                 = var.create_db_subnet_group
+  vpc_security_group_ids                 = split(",", module.security_group_rds.security_group_id)
+  skip_final_snapshot                    = var.skip_final_snapshot
+  final_snapshot_identifier_prefix       = var.final_snapshot_identifier_prefix
+  snapshot_identifier                    = var.snapshot_identifier
+  maintenance_window                     = var.maintenance_window
+  backup_window                          = var.backup_window
+  backup_retention_period                = var.backup_retention_period
+  apply_immediately                      = var.apply_immediately
   manage_master_user_password            = var.manage_master_user_password ? true : false
   monitoring_interval                    = "30"
   monitoring_role_name                   = format("%s-%s-RDSMySQL", var.rds_instance_name, var.environment)
@@ -188,7 +188,7 @@ resource "aws_cloudwatch_metric_alarm" "cache_cpu" {
   threshold = var.alarm_cpu_threshold_percent
 
   dimensions = {
-    DBInstanceIdentifier = module.db.db_instance_id
+    DBInstanceIdentifier = module.db.db_instance_identifier
   }
 
   alarm_actions = [aws_sns_topic.slack_topic[0].arn]
@@ -215,7 +215,7 @@ resource "aws_cloudwatch_metric_alarm" "disk_free_storage_space_too_low" {
   threshold = var.disk_free_storage_space
 
   dimensions = {
-    DBInstanceIdentifier = module.db.db_instance_id
+    DBInstanceIdentifier = module.db.db_instance_identifier
   }
 
   alarm_actions = [aws_sns_topic.slack_topic[0].arn]

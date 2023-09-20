@@ -2,10 +2,7 @@ locals {
   name                    = "mysql"
   region                  = "us-east-2"
   family                  = "mysql8.0"
-  vpc_id                  = "vpc-06861ba817a8cda10"
-  subnet_ids              = ["subnet-09e8f6ea27b7e36d0", "subnet-0b070110454617a90"]
   environment             = "prod"
-  kms_key_arn             = ""
   mysql_instance_class    = "db.t3.medium"
   mysql_engine_version    = "8.0.32"
   major_engine_version    = "8.0"
@@ -18,7 +15,6 @@ locals {
   vpc_cidr                   = "10.10.0.0/16"
   enable_storage_autoscaling = true
   current_identity           = data.aws_caller_identity.current.arn
-
 }
 
 data "aws_caller_identity" "current" {}
