@@ -1,4 +1,4 @@
-## MySQL Example
+## MySQL with Replica Example
 ![squareops_avatar]
 
 [squareops_avatar]: https://squareops.com/wp-content/uploads/2022/12/squareops-logo.png
@@ -52,4 +52,7 @@ No inputs.
 | <a name="output_rds-mysql_instance_endpoint"></a> [rds-mysql\_instance\_endpoint](#output\_rds-mysql\_instance\_endpoint) | The endpoint for connecting to the database instance |
 | <a name="output_rds-mysql_instance_password"></a> [rds-mysql\_instance\_password](#output\_rds-mysql\_instance\_password) | The password for accessing the database instance (note: Terraform doesn't track changes to this password) |
 | <a name="output_rds-mysql_instance_username"></a> [rds-mysql\_instance\_username](#output\_rds-mysql\_instance\_username) | The master username for accessing the database instance |
+| <a name="output_rds-mysql_replica_db_instance_name"></a> [rds-mysql\_replica\_db\_instance\_name](#output\_rds-mysql\_replica\_db\_instance\_name) | The name of the database instance |
+| <a name="output_rds-mysql_replica_instance_endpoint"></a> [rds-mysql\_replica\_instance\_endpoint](#output\_rds-mysql\_replica\_instance\_endpoint) | The endpoint for connecting to the database instance |
+| <a name="output_rds-mysql_replica_instance_id"></a> [rds-mysql\_replica\_instance\_id](#output\_rds-mysql\_replica\_instance\_id) | The master username for accessing the database instance |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

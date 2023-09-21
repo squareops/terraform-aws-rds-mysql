@@ -1,20 +1,22 @@
 locals {
-  name                       = "mysql"
-  region                     = "us-east-2"
-  family                     = "mysql8.0"
-  environment                = "prod"
-  mysql_instance_class       = "db.t3.medium"
-  mysql_engine_version       = "8.0.32"
-  major_engine_version       = "8.0"
-  allowed_security_groups    = ["sg-0ef14212995d67a2d"]
-  vpc_cidr                   = "10.10.0.0/16"
-  current_identity           = data.aws_caller_identity.current.arn
-  enable_storage_autoscaling = true
+  name                    = "mysql"
+  region                  = "us-east-2"
+  family                  = "mysql8.0"
+  environment             = "prod"
+  mysql_instance_class    = "db.t3.medium"
+  mysql_engine_version    = "8.0.32"
+  major_engine_version    = "8.0"
+  allowed_security_groups = ["sg-0ef14212995d67a2d"]
   additional_tags = {
     Owner      = "Organization_Name"
     Expires    = "Never"
     Department = "Engineering"
   }
+  vpc_cidr                   = "10.10.0.0/16"
+  enable_storage_autoscaling = true
+  current_identity           = data.aws_caller_identity.current.arn
+  replica_enable             = true
+  replica_count              = 1
 }
 
 data "aws_caller_identity" "current" {}
@@ -99,10 +101,12 @@ module "rds-mysql" {
   source                           = "squareops/rds-mysql/aws"
   name                             = local.name
   vpc_id                           = module.vpc.vpc_id
-  family                           = local.family
-  multi_az                         = false
   subnet_ids                       = module.vpc.database_subnets
+  family                           = local.family
   db_name                          = "testdb"
+  multi_az                         = false
+  replica_enable                   = local.replica_enable
+  replica_count                    = local.replica_count
   environment                      = local.environment
   kms_key_arn                      = module.kms.key_arn
   engine_version                   = local.mysql_engine_version
@@ -124,6 +128,6 @@ module "rds-mysql" {
   alarm_cpu_threshold_percent      = 70
   disk_free_storage_space          = "10000000" # in bytes
   slack_username                   = "Admin"
-  slack_channel                    = "mysql-notification"
+  slack_channel                    = "mysql-repl-notification"
   slack_webhook_url                = "https://hooks/xxxxxxxx"
 }

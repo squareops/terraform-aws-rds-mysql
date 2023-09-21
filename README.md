@@ -16,9 +16,10 @@ Features
   6. Maintenance Window: Configure a maintenance window for performing regular database maintenance tasks.
   7. Public Accessibility: Choose whether the database cluster should be publicly accessible over the internet.
   8. Replication: Replicate data from another Amazon RDS database by specifying the source database identifier.
-    Snapshot Restore: Restore the database from a specified snapshot ID to easily recreate database instances.
-  9. VPC Support: Deploy the RDS cluster in a specific Virtual Private Cloud (VPC) and specify the associated subnets for network isolation.
-  10. CloudWatch Alerts: Set up CloudWatch alarms to monitor the health and performance of your Redis cluster. Integrate these alarms with AWS Simple Notification Service (SNS) to receive real-time alerts. Use AWS Lambda functions to customize your alerting logic, and send notifications to Slack channels for immediate visibility into your RDS MYSQL status.
+  9. Snapshot Restore: Restore the database from a specified snapshot ID to easily recreate database instances.
+  10. VPC Support: Deploy the RDS cluster in a specific Virtual Private Cloud (VPC) and specify the associated subnets for network isolation.
+  11. CloudWatch Alerts: Set up CloudWatch alarms to monitor the health and performance of your Redis cluster. Integrate these alarms with AWS Simple Notification Service (SNS) to receive real-time alerts. Use AWS Lambda functions to customize your alerting logic, and send notifications to Slack channels for immediate visibility into your RDS MYSQL status.
+  12. Supports feature for storage autoscaling to avoid the storage bottleneck and Replica configuration with desired number of replicas.
 
 ## Usage Example
 
@@ -28,6 +29,8 @@ module "rds-mysql" {
 
   name                             = "name"
   vpc_id                           = "vpc-0d2c255df1f"
+  replica_enable                   = false
+  replica_count                    = 1
   subnet_ids                       = ["subnet-04cecf2400","subnet-0ac69f821"]
   family                           = "mysql8.0
   db_name                          = "proddb"
@@ -57,7 +60,7 @@ module "rds-mysql" {
 }
 
 ```
-Refer [examples](https://github.com/squareops/terraform-aws-rds-mysql/tree/main/examples/complete-mysql) directory for more references.
+Refer [examples](https://github.com/squareops/terraform-aws-rds-mysql/tree/main/examples) directory for more references.
 
  ## IAM Permissions
 The required IAM permissions to create resources from this module can be found [here](https://github.com/squareops/terraform-aws-rds-mysql/blob/main/IAM.md)
@@ -86,13 +89,15 @@ Security scanning is graciously provided by Prowler. Proowler is the leading ful
 |------|---------|
 | <a name="provider_archive"></a> [archive](#provider\_archive) | n/a |
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.23 |
+| <a name="provider_random"></a> [random](#provider\_random) | n/a |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_cw_sns_slack"></a> [cw\_sns\_slack](#module\_cw\_sns\_slack) | ./lambda | n/a |
-| <a name="module_db"></a> [db](#module\_db) | terraform-aws-modules/rds/aws | 5.1.0 |
+| <a name="module_db"></a> [db](#module\_db) | terraform-aws-modules/rds/aws | 6.1.0 |
+| <a name="module_db_replica"></a> [db\_replica](#module\_db\_replica) | terraform-aws-modules/rds/aws | 6.1.0 |
 | <a name="module_security_group_rds"></a> [security\_group\_rds](#module\_security\_group\_rds) | terraform-aws-modules/security-group/aws | 4.13.0 |
 
 ## Resources
@@ -105,10 +110,12 @@ Security scanning is graciously provided by Prowler. Proowler is the leading ful
 | [aws_kms_key.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
 | [aws_lambda_permission.sns_lambda_slack_invoke](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
 | [aws_secretsmanager_secret.secret_master_db](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret) | resource |
+| [aws_secretsmanager_secret_version.rds_credentials](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret_version) | resource |
 | [aws_security_group_rule.cidr_ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
 | [aws_security_group_rule.default_ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
 | [aws_sns_topic.slack_topic](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic) | resource |
 | [aws_sns_topic_subscription.slack-endpoint](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sns_topic_subscription) | resource |
+| [random_password.master](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
 | [archive_file.lambdazip](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file) | data source |
 
 ## Inputs
@@ -133,6 +140,7 @@ Security scanning is graciously provided by Prowler. Proowler is the leading ful
 | <a name="input_disk_free_storage_space"></a> [disk\_free\_storage\_space](#input\_disk\_free\_storage\_space) | Alarm threshold for the 'lowFreeStorageSpace' alarm | `string` | `"10000000000"` | no |
 | <a name="input_enable_general_log"></a> [enable\_general\_log](#input\_enable\_general\_log) | Whether to enable general logs in CloudWatch | `bool` | `true` | no |
 | <a name="input_enable_slow_query_log"></a> [enable\_slow\_query\_log](#input\_enable\_slow\_query\_log) | Whether to enable slow query logs in CloudWatch | `bool` | `true` | no |
+| <a name="input_enable_storage_autoscaling"></a> [enable\_storage\_autoscaling](#input\_enable\_storage\_autoscaling) | Whether enable storage autoscaling or not | `bool` | `false` | no |
 | <a name="input_engine"></a> [engine](#input\_engine) | The name of the database engine to be used for this DB cluster | `string` | `"mysql"` | no |
 | <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | The database engine version. Updating this argument results in an outage. | `string` | `""` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Select enviroment type: dev, demo, prod | `string` | `"demo"` | no |
@@ -142,14 +150,18 @@ Security scanning is graciously provided by Prowler. Proowler is the leading ful
 | <a name="input_kms_key_arn"></a> [kms\_key\_arn](#input\_kms\_key\_arn) | The ARN for the KMS encryption key. If creating an encrypted replica, set this to the destination KMS ARN. If storage\_encrypted is set to true and kms\_key\_id is not specified, the default KMS key created in your account will be used | `string` | `null` | no |
 | <a name="input_maintenance_window"></a> [maintenance\_window](#input\_maintenance\_window) | The maintenance window for performing database maintenance | `string` | `"Mon:00:00-Mon:03:00"` | no |
 | <a name="input_major_engine_version"></a> [major\_engine\_version](#input\_major\_engine\_version) | The major version of the database engine. Updating this argument results in an outage. | `string` | `""` | no |
+| <a name="input_manage_master_user_password"></a> [manage\_master\_user\_password](#input\_manage\_master\_user\_password) | Whether to manage master user password through service linked secret manager | `bool` | `false` | no |
 | <a name="input_master_username"></a> [master\_username](#input\_master\_username) | The username for the RDS primary cluster | `string` | `""` | no |
+| <a name="input_max_allocated_storage"></a> [max\_allocated\_storage](#input\_max\_allocated\_storage) | The Maximum storage capacity for the database value after autoscaling | `number` | `null` | no |
 | <a name="input_multi_az"></a> [multi\_az](#input\_multi\_az) | Enables multi-AZ for disaster recovery | `bool` | `false` | no |
 | <a name="input_name"></a> [name](#input\_name) | The name of the RDS instance | `string` | `""` | no |
 | <a name="input_ok_actions"></a> [ok\_actions](#input\_ok\_actions) | The list of actions to execute when this alarm transitions into an OK state from any other state. Each action is specified as an Amazon Resource Number (ARN) | `list(string)` | `[]` | no |
 | <a name="input_port"></a> [port](#input\_port) | The port for the database | `number` | `3306` | no |
 | <a name="input_publicly_accessible"></a> [publicly\_accessible](#input\_publicly\_accessible) | Specifies whether the database is publicly accessible over the internet | `bool` | `false` | no |
-| <a name="input_random_password_length"></a> [random\_password\_length](#input\_random\_password\_length) | The length of the randomly generated password. (default: 10) | `number` | `20` | no |
+| <a name="input_random_password_length"></a> [random\_password\_length](#input\_random\_password\_length) | The length of the randomly generated password. (default: 10) | `number` | `16` | no |
 | <a name="input_rds_instance_name"></a> [rds\_instance\_name](#input\_rds\_instance\_name) | The name of the RDS instance | `string` | `""` | no |
+| <a name="input_replica_count"></a> [replica\_count](#input\_replica\_count) | The number of replica instance | `number` | `1` | no |
+| <a name="input_replica_enable"></a> [replica\_enable](#input\_replica\_enable) | Whether enable replica DB | `bool` | `false` | no |
 | <a name="input_replicate_source_db"></a> [replicate\_source\_db](#input\_replicate\_source\_db) | Specifies the identifier of another Amazon RDS Database to replicate as the source database | `string` | `null` | no |
 | <a name="input_skip_final_snapshot"></a> [skip\_final\_snapshot](#input\_skip\_final\_snapshot) | Determines whether a final DB snapshot is created before the DB instance is deleted. If true, no DBSnapshot is created. If false, a DB snapshot is created using the value from final\_snapshot\_identifier | `bool` | `true` | no |
 | <a name="input_slack_channel"></a> [slack\_channel](#input\_slack\_channel) | The Slack channel where notifications will be posted. | `string` | `""` | no |
@@ -157,6 +169,7 @@ Security scanning is graciously provided by Prowler. Proowler is the leading ful
 | <a name="input_slack_webhook_url"></a> [slack\_webhook\_url](#input\_slack\_webhook\_url) | The Slack Webhook URL where notifications will be sent. | `string` | `""` | no |
 | <a name="input_snapshot_identifier"></a> [snapshot\_identifier](#input\_snapshot\_identifier) | Specifies whether to create this database from a snapshot. Use the snapshot ID found in the RDS console, e.g., rds:production-2015-06-26-06-05. | `string` | `null` | no |
 | <a name="input_storage_encrypted"></a> [storage\_encrypted](#input\_storage\_encrypted) | Specifies whether database encryption is enabled | `bool` | `true` | no |
+| <a name="input_storage_type"></a> [storage\_type](#input\_storage\_type) | The storage type for the database storage like gp2,gp3,io1 | `string` | `"gp2"` | no |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | A list of subnet IDs used by the database subnet group created | `list(any)` | `[]` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | The ID of the VPC where the RDS cluster should be deployed | `string` | `""` | no |
 
@@ -169,9 +182,13 @@ Security scanning is graciously provided by Prowler. Proowler is the leading ful
 | <a name="output_db_instance_password"></a> [db\_instance\_password](#output\_db\_instance\_password) | The password for accessing the database instance (note: Terraform doesn't track changes to this password) |
 | <a name="output_db_instance_username"></a> [db\_instance\_username](#output\_db\_instance\_username) | The master username for accessing the database instance |
 | <a name="output_db_parameter_group_id"></a> [db\_parameter\_group\_id](#output\_db\_parameter\_group\_id) | The ID of the database parameter group |
-| <a name="output_db_secret_arn"></a> [db\_secret\_arn](#output\_db\_secret\_arn) | The ARN (Amazon Resource Name) of the secret storing database credentials |
 | <a name="output_db_subnet_group_id"></a> [db\_subnet\_group\_id](#output\_db\_subnet\_group\_id) | The ID of the database subnet group |
+| <a name="output_enhanced_monitoring_iam_role_arn"></a> [enhanced\_monitoring\_iam\_role\_arn](#output\_enhanced\_monitoring\_iam\_role\_arn) | The ARN of the monitoring role |
+| <a name="output_master_credential_secret_arn"></a> [master\_credential\_secret\_arn](#output\_master\_credential\_secret\_arn) | The ARN of the master user secret (Only available when manage\_master\_user\_password is set to true) |
 | <a name="output_rds_dedicated_security_group"></a> [rds\_dedicated\_security\_group](#output\_rds\_dedicated\_security\_group) | The security group ID associated with the RDS cluster |
+| <a name="output_replica_db_instance_address"></a> [replica\_db\_instance\_address](#output\_replica\_db\_instance\_address) | The ID of the replica database instance |
+| <a name="output_replica_db_instance_endpoint"></a> [replica\_db\_instance\_endpoint](#output\_replica\_db\_instance\_endpoint) | The replica db endpoint for connecting to the database instance |
+| <a name="output_replica_db_instance_name"></a> [replica\_db\_instance\_name](#output\_replica\_db\_instance\_name) | The name of the replica database instance |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## Contribute & Issue Report
