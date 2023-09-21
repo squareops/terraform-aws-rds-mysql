@@ -19,7 +19,7 @@ Features
   9. Snapshot Restore: Restore the database from a specified snapshot ID to easily recreate database instances.
   10. VPC Support: Deploy the RDS cluster in a specific Virtual Private Cloud (VPC) and specify the associated subnets for network isolation.
   11. CloudWatch Alerts: Set up CloudWatch alarms to monitor the health and performance of your Redis cluster. Integrate these alarms with AWS Simple Notification Service (SNS) to receive real-time alerts. Use AWS Lambda functions to customize your alerting logic, and send notifications to Slack channels for immediate visibility into your RDS MYSQL status.
-  12. Supports feature for storage autoscaling to avoid the storage bottleneck.
+  12. Supports feature for storage autoscaling to avoid the storage bottleneck and Replica configuration with desired number of replicas.
 
 ## Usage Example
 
@@ -30,6 +30,7 @@ module "rds-mysql" {
   name                             = "name"
   vpc_id                           = "vpc-0d2c255df1f"
   replica_enable                   = false
+  replica_count                    = 1
   subnet_ids                       = ["subnet-04cecf2400","subnet-0ac69f821"]
   family                           = "mysql8.0
   db_name                          = "proddb"
@@ -59,7 +60,7 @@ module "rds-mysql" {
 }
 
 ```
-Refer [examples](https://github.com/squareops/terraform-aws-rds-mysql/tree/main/examples/complete-mysql) directory for more references.
+Refer [examples](https://github.com/squareops/terraform-aws-rds-mysql/tree/main/examples) directory for more references.
 
  ## IAM Permissions
 The required IAM permissions to create resources from this module can be found [here](https://github.com/squareops/terraform-aws-rds-mysql/blob/main/IAM.md)
