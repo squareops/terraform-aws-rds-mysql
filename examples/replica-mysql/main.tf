@@ -99,21 +99,22 @@ module "vpc" {
 
 module "rds-mysql" {
   source                           = "squareops/rds-mysql/aws"
+  name                             = local.name
   vpc_id                           = module.vpc.vpc_id
   subnet_ids                       = module.vpc.database_subnets
+  family                           = local.family
+  db_name                          = "testdb"
+  multi_az                         = false
   replica_enable                   = local.replica_enable
   replica_count                    = local.replica_count
-  family                           = local.family
-  max_allocated_storage            = 120
-  db_name                          = "testdb"
-  storage_type                     = "gp3"
-  multi_az                         = false
   environment                      = local.environment
   kms_key_arn                      = module.kms.key_arn
   engine_version                   = local.mysql_engine_version
   instance_class                   = local.mysql_instance_class
   master_username                  = "admin"
+  storage_type                     = "gp3"
   allocated_storage                = 20
+  max_allocated_storage            = 120
   rds_instance_name                = local.name
   major_engine_version             = local.major_engine_version
   publicly_accessible              = false
@@ -126,7 +127,7 @@ module "rds-mysql" {
   cloudwatch_metric_alarms_enabled = true
   alarm_cpu_threshold_percent      = 70
   disk_free_storage_space          = "10000000" # in bytes
-  slack_username                   = ""
-  slack_channel                    = ""
-  slack_webhook_url                = ""
+  slack_username                   = "Admin"
+  slack_channel                    = "mysql-repl-notification"
+  slack_webhook_url                = "https://hooks/xxxxxxxx"
 }
