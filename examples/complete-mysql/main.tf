@@ -1,12 +1,12 @@
 locals {
-  name                    = "mysql"
-  region                  = "us-east-2"
-  family                  = "mysql8.0"
-  environment             = "prod"
-  mysql_instance_class    = "db.t3.medium"
-  mysql_engine_version    = "8.0.32"
-  major_engine_version    = "8.0"
-  allowed_security_groups = ["sg-0ef14212995d67a2d"]
+  name                       = "mysql"
+  region                     = "us-east-2"
+  family                     = "mysql8.0"
+  environment                = "prod"
+  mysql_instance_class       = "db.t3.medium"
+  mysql_engine_version       = "8.0.32"
+  major_engine_version       = "8.0"
+  allowed_security_groups    = ["sg-0ef14212995d67a2d"]
   vpc_cidr                   = "10.10.0.0/16"
   current_identity           = data.aws_caller_identity.current.arn
   enable_storage_autoscaling = true
