@@ -265,6 +265,7 @@ EOF
 }
 
 data "archive_file" "lambdazip" {
+  count       = var.slack_notification_enabled ? 1 : 0
   type        = "zip"
   output_path = "${path.module}/lambda/sns_slack.zip"
 
@@ -273,6 +274,7 @@ data "archive_file" "lambdazip" {
 
 
 module "cw_sns_slack" {
+  count       = var.slack_notification_enabled ? 1 : 0
   source = "./lambda"
 
   name          = format("%s-%s-%s", var.environment, var.name, "sns-slack")
@@ -294,16 +296,18 @@ module "cw_sns_slack" {
 }
 
 resource "aws_sns_topic_subscription" "slack-endpoint" {
-  endpoint               = module.cw_sns_slack.arn
+  count       = var.slack_notification_enabled ? 1 : 0
+  endpoint               = module.cw_sns_slack[0].arn
   protocol               = "lambda"
   endpoint_auto_confirms = true
   topic_arn              = aws_sns_topic.slack_topic[0].arn
 }
 
 resource "aws_lambda_permission" "sns_lambda_slack_invoke" {
+  count       = var.slack_notification_enabled ? 1 : 0
   statement_id  = "sns_slackAllowExecutionFromSNS"
   action        = "lambda:InvokeFunction"
-  function_name = module.cw_sns_slack.arn
+  function_name = module.cw_sns_slack[0].arn
   principal     = "sns.amazonaws.com"
   source_arn    = aws_sns_topic.slack_topic[0].arn
 }
