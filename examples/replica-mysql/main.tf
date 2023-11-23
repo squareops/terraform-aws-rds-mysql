@@ -7,6 +7,7 @@ locals {
   mysql_engine_version    = "8.0.32"
   major_engine_version    = "8.0"
   allowed_security_groups = ["sg-0ef14212995d67a2d"]
+  custom_user_password       = ""
   additional_tags = {
     Owner      = "Organization_Name"
     Expires    = "Never"
@@ -131,4 +132,6 @@ module "rds-mysql" {
   slack_username                   = "Admin"
   slack_channel                    = "mysql-repl-notification"
   slack_webhook_url                = "https://hooks/xxxxxxxx"
+  custom_user_password             = local.custom_user_password
+
 }
