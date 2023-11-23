@@ -9,6 +9,7 @@ locals {
   allowed_security_groups    = ["sg-0ef14212995d67a2d"]
   vpc_cidr                   = "10.10.0.0/16"
   current_identity           = data.aws_caller_identity.current.arn
+  custom_user_password       = ""
   enable_storage_autoscaling = true
   additional_tags = {
     Owner      = "Organization_Name"
@@ -96,7 +97,7 @@ module "vpc" {
 }
 
 module "rds-mysql" {
-  source                           = "squareops/rds-mysql/aws"
+  source                           = "terraform-aws-modules/rds/aws"
   name                             = local.name
   vpc_id                           = module.vpc.vpc_id
   family                           = local.family
@@ -127,4 +128,5 @@ module "rds-mysql" {
   slack_username                   = "Admin"
   slack_channel                    = "mysql-notification"
   slack_webhook_url                = "https://hooks/xxxxxxxx"
+  custom_user_password             = local.custom_user_password
 }

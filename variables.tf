@@ -49,7 +49,7 @@ variable "cloudwatch_log_group_retention_in_days" {
 variable "create_random_password" {
   description = "Whether to create a random password for the primary database cluster"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "create_db_subnet_group" {
@@ -240,7 +240,7 @@ variable "replica_count" {
 
 variable "manage_master_user_password" {
   description = "Whether to manage master user password through service linked secret manager"
-  default     = false
+  default     = true
   type        = bool
 }
 
@@ -300,6 +300,12 @@ variable "slack_username" {
 
 variable "cw_sns_topic_arn" {
   description = "The username to use when sending notifications to Slack."
+  default     = ""
+  type        = string
+}
+
+variable "custom_user_password" {
+  description = "Custom password for the RDS master user"
   default     = ""
   type        = string
 }
