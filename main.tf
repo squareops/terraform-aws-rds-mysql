@@ -9,7 +9,7 @@ module "db" {
   version                                = "6.1.0"
   identifier                             = format("%s-%s", var.environment, var.rds_instance_name)
   db_name                                = var.db_name
-  password = var.custom_user_password != "" ? var.custom_user_password : var.manage_master_user_password ? null : length(random_password.master) > 0 ? random_password.master[0].result : null
+  password                               = var.custom_user_password != "" ? var.custom_user_password : var.manage_master_user_password ? null : length(random_password.master) > 0 ? random_password.master[0].result : null
   username                               = var.master_username
   port                                   = var.port
   engine                                 = var.engine
@@ -274,7 +274,7 @@ data "archive_file" "lambdazip" {
 
 
 module "cw_sns_slack" {
-  count       = var.slack_notification_enabled ? 1 : 0
+  count  = var.slack_notification_enabled ? 1 : 0
   source = "./lambda"
 
   name          = format("%s-%s-%s", var.environment, var.name, "sns-slack")
@@ -296,7 +296,7 @@ module "cw_sns_slack" {
 }
 
 resource "aws_sns_topic_subscription" "slack-endpoint" {
-  count       = var.slack_notification_enabled ? 1 : 0
+  count                  = var.slack_notification_enabled ? 1 : 0
   endpoint               = module.cw_sns_slack[0].arn
   protocol               = "lambda"
   endpoint_auto_confirms = true
@@ -304,7 +304,7 @@ resource "aws_sns_topic_subscription" "slack-endpoint" {
 }
 
 resource "aws_lambda_permission" "sns_lambda_slack_invoke" {
-  count       = var.slack_notification_enabled ? 1 : 0
+  count         = var.slack_notification_enabled ? 1 : 0
   statement_id  = "sns_slackAllowExecutionFromSNS"
   action        = "lambda:InvokeFunction"
   function_name = module.cw_sns_slack[0].arn

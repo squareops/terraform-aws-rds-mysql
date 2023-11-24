@@ -57,6 +57,7 @@ module "rds-mysql" {
   slack_username                   = "John"
   slack_channel                    = "skaf"
   slack_webhook_url                = "https://hooks/xxxxxxxx"
+  custom_user_password             = "mysqlpassword"
 }
 
 ```
@@ -133,7 +134,8 @@ Security scanning is graciously provided by Prowler. Proowler is the leading ful
 | <a name="input_cloudwatch_log_group_retention_in_days"></a> [cloudwatch\_log\_group\_retention\_in\_days](#input\_cloudwatch\_log\_group\_retention\_in\_days) | The number of days to retain CloudWatch logs for the database instance | `number` | `7` | no |
 | <a name="input_cloudwatch_metric_alarms_enabled"></a> [cloudwatch\_metric\_alarms\_enabled](#input\_cloudwatch\_metric\_alarms\_enabled) | Boolean flag to enable/disable CloudWatch metrics alarms | `bool` | `false` | no |
 | <a name="input_create_db_subnet_group"></a> [create\_db\_subnet\_group](#input\_create\_db\_subnet\_group) | Whether to create a database subnet group | `bool` | `true` | no |
-| <a name="input_create_random_password"></a> [create\_random\_password](#input\_create\_random\_password) | Whether to create a random password for the primary database cluster | `bool` | `true` | no |
+| <a name="input_create_random_password"></a> [create\_random\_password](#input\_create\_random\_password) | Whether to create a random password for the primary database cluster | `bool` | `false` | no |
+| <a name="input_custom_user_password"></a> [custom\_user\_password](#input\_custom\_user\_password) | Custom password for the RDS master user | `string` | `""` | no |
 | <a name="input_cw_sns_topic_arn"></a> [cw\_sns\_topic\_arn](#input\_cw\_sns\_topic\_arn) | The username to use when sending notifications to Slack. | `string` | `""` | no |
 | <a name="input_db_name"></a> [db\_name](#input\_db\_name) | The name for an automatically created database on cluster creation | `string` | `""` | no |
 | <a name="input_deletion_protection"></a> [deletion\_protection](#input\_deletion\_protection) | Whether accidental deletion protection is enabled | `bool` | `true` | no |
@@ -150,7 +152,7 @@ Security scanning is graciously provided by Prowler. Proowler is the leading ful
 | <a name="input_kms_key_arn"></a> [kms\_key\_arn](#input\_kms\_key\_arn) | The ARN for the KMS encryption key. If creating an encrypted replica, set this to the destination KMS ARN. If storage\_encrypted is set to true and kms\_key\_id is not specified, the default KMS key created in your account will be used | `string` | `null` | no |
 | <a name="input_maintenance_window"></a> [maintenance\_window](#input\_maintenance\_window) | The maintenance window for performing database maintenance | `string` | `"Mon:00:00-Mon:03:00"` | no |
 | <a name="input_major_engine_version"></a> [major\_engine\_version](#input\_major\_engine\_version) | The major version of the database engine. Updating this argument results in an outage. | `string` | `""` | no |
-| <a name="input_manage_master_user_password"></a> [manage\_master\_user\_password](#input\_manage\_master\_user\_password) | Whether to manage master user password through service linked secret manager | `bool` | `false` | no |
+| <a name="input_manage_master_user_password"></a> [manage\_master\_user\_password](#input\_manage\_master\_user\_password) | Whether to manage master user password through service linked secret manager | `bool` | `true` | no |
 | <a name="input_master_username"></a> [master\_username](#input\_master\_username) | The username for the RDS primary cluster | `string` | `""` | no |
 | <a name="input_max_allocated_storage"></a> [max\_allocated\_storage](#input\_max\_allocated\_storage) | The Maximum storage capacity for the database value after autoscaling | `number` | `null` | no |
 | <a name="input_multi_az"></a> [multi\_az](#input\_multi\_az) | Enables multi-AZ for disaster recovery | `bool` | `false` | no |
@@ -165,6 +167,7 @@ Security scanning is graciously provided by Prowler. Proowler is the leading ful
 | <a name="input_replicate_source_db"></a> [replicate\_source\_db](#input\_replicate\_source\_db) | Specifies the identifier of another Amazon RDS Database to replicate as the source database | `string` | `null` | no |
 | <a name="input_skip_final_snapshot"></a> [skip\_final\_snapshot](#input\_skip\_final\_snapshot) | Determines whether a final DB snapshot is created before the DB instance is deleted. If true, no DBSnapshot is created. If false, a DB snapshot is created using the value from final\_snapshot\_identifier | `bool` | `true` | no |
 | <a name="input_slack_channel"></a> [slack\_channel](#input\_slack\_channel) | The Slack channel where notifications will be posted. | `string` | `""` | no |
+| <a name="input_slack_notification_enabled"></a> [slack\_notification\_enabled](#input\_slack\_notification\_enabled) | Whether to enable/disable slack notification. | `bool` | `false` | no |
 | <a name="input_slack_username"></a> [slack\_username](#input\_slack\_username) | The username to use when sending notifications to Slack. | `string` | `""` | no |
 | <a name="input_slack_webhook_url"></a> [slack\_webhook\_url](#input\_slack\_webhook\_url) | The Slack Webhook URL where notifications will be sent. | `string` | `""` | no |
 | <a name="input_snapshot_identifier"></a> [snapshot\_identifier](#input\_snapshot\_identifier) | Specifies whether to create this database from a snapshot. Use the snapshot ID found in the RDS console, e.g., rds:production-2015-06-26-06-05. | `string` | `null` | no |
