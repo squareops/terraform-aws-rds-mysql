@@ -240,7 +240,7 @@ variable "replica_count" {
 
 variable "manage_master_user_password" {
   description = "Whether to manage master user password through service linked secret manager"
-  default     = true
+  default     = false
   type        = bool
 }
 
