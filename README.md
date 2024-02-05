@@ -34,7 +34,7 @@ module "rds-mysql" {
   subnet_ids                       = ["subnet-04cecf2400","subnet-0ac69f821"]
   family                           = "mysql8.0
   db_name                          = "proddb"
-  availability_zone                = "us-east-2"
+  availability_zone                = "us-east-2a"
   multi_az                         = false
   environment                      = "prod"
   kms_key_arn                      = "arn:aws:kms:us-east-2:2222222222:key/a22ecc12-4-ae1be7590774"
@@ -130,6 +130,7 @@ Security scanning is graciously provided by Prowler. Proowler is the leading ful
 | <a name="input_allowed_cidr_blocks"></a> [allowed\_cidr\_blocks](#input\_allowed\_cidr\_blocks) | A list of CIDR blocks that are allowed to access the database | `list(any)` | `[]` | no |
 | <a name="input_allowed_security_groups"></a> [allowed\_security\_groups](#input\_allowed\_security\_groups) | A list of Security Group IDs to allow access to the database | `list(any)` | `[]` | no |
 | <a name="input_apply_immediately"></a> [apply\_immediately](#input\_apply\_immediately) | Specifies whether any cluster modifications are applied immediately or during the next maintenance window | `bool` | `false` | no |
+| <a name="input_availability_zone"></a> [availability\_zone](#input\_availability\_zone) | The Availability Zone of the RDS instance | `string` | `null` | no |
 | <a name="input_backup_retention_period"></a> [backup\_retention\_period](#input\_backup\_retention\_period) | The number of days to retain backups for | `number` | `5` | no |
 | <a name="input_backup_window"></a> [backup\_window](#input\_backup\_window) | The time window during which database backups are performed | `string` | `"03:00-06:00"` | no |
 | <a name="input_cloudwatch_log_group_retention_in_days"></a> [cloudwatch\_log\_group\_retention\_in\_days](#input\_cloudwatch\_log\_group\_retention\_in\_days) | The number of days to retain CloudWatch logs for the database instance | `number` | `7` | no |
@@ -153,7 +154,7 @@ Security scanning is graciously provided by Prowler. Proowler is the leading ful
 | <a name="input_kms_key_arn"></a> [kms\_key\_arn](#input\_kms\_key\_arn) | The ARN for the KMS encryption key. If creating an encrypted replica, set this to the destination KMS ARN. If storage\_encrypted is set to true and kms\_key\_id is not specified, the default KMS key created in your account will be used | `string` | `null` | no |
 | <a name="input_maintenance_window"></a> [maintenance\_window](#input\_maintenance\_window) | The maintenance window for performing database maintenance | `string` | `"Mon:00:00-Mon:03:00"` | no |
 | <a name="input_major_engine_version"></a> [major\_engine\_version](#input\_major\_engine\_version) | The major version of the database engine. Updating this argument results in an outage. | `string` | `""` | no |
-| <a name="input_manage_master_user_password"></a> [manage\_master\_user\_password](#input\_manage\_master\_user\_password) | Whether to manage master user password through service linked secret manager | `bool` | `true` | no |
+| <a name="input_manage_master_user_password"></a> [manage\_master\_user\_password](#input\_manage\_master\_user\_password) | Whether to manage master user password through service linked secret manager | `bool` | `false` | no |
 | <a name="input_master_username"></a> [master\_username](#input\_master\_username) | The username for the RDS primary cluster | `string` | `""` | no |
 | <a name="input_max_allocated_storage"></a> [max\_allocated\_storage](#input\_max\_allocated\_storage) | The Maximum storage capacity for the database value after autoscaling | `number` | `null` | no |
 | <a name="input_multi_az"></a> [multi\_az](#input\_multi\_az) | Enables multi-AZ for disaster recovery | `bool` | `false` | no |

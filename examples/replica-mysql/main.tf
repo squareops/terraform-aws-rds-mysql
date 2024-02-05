@@ -1,7 +1,7 @@
 locals {
   name                    = "mysql"
   region                  = "us-east-2"
-  availability_zone          = "us-east-2a"
+  availability_zone       = "us-east-2a"
   family                  = "mysql8.0"
   environment             = "prod"
   mysql_instance_class    = "db.t3.medium"
