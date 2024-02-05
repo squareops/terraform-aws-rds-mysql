@@ -1,6 +1,7 @@
 locals {
   name                       = "mysql"
   region                     = "us-east-2"
+  availability_zone          = "us-east-2a"
   family                     = "mysql8.0"
   environment                = "prod"
   mysql_instance_class       = "db.t3.medium"
@@ -101,6 +102,7 @@ module "rds-mysql" {
   name                             = local.name
   vpc_id                           = module.vpc.vpc_id
   family                           = local.family
+  availability_zone                = local.availability_zone
   multi_az                         = false
   subnet_ids                       = module.vpc.database_subnets
   db_name                          = "testdb"
