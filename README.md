@@ -34,6 +34,7 @@ module "rds-mysql" {
   subnet_ids                       = ["subnet-04cecf2400","subnet-0ac69f821"]
   family                           = "mysql8.0
   db_name                          = "proddb"
+  availability_zone                = "us-east-2"
   multi_az                         = false
   environment                      = "prod"
   kms_key_arn                      = "arn:aws:kms:us-east-2:2222222222:key/a22ecc12-4-ae1be7590774"
