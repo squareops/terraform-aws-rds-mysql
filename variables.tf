@@ -4,6 +4,12 @@ variable "name" {
   type        = string
 }
 
+variable "availability_zone" {
+  description = "The Availability Zone of the RDS instance"
+  type        = string
+  default     = null
+}
+
 variable "allocated_storage" {
   description = "The storage capacity for the database"
   default     = 20

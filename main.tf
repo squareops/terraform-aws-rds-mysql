@@ -13,6 +13,7 @@ module "db" {
   username                               = var.master_username
   port                                   = var.port
   engine                                 = var.engine
+  availability_zone                      = var.availability_zone
   multi_az                               = var.multi_az
   subnet_ids                             = var.subnet_ids
   kms_key_id                             = var.kms_key_arn
@@ -70,6 +71,7 @@ module "db_replica" {
   identifier                             = format("%s-%s-replica-%d", var.environment, var.rds_instance_name, count.index)
   port                                   = var.port
   engine                                 = var.engine
+  availability_zone                      = var.availability_zone
   multi_az                               = var.multi_az
   kms_key_id                             = var.kms_key_arn
   storage_type                           = var.storage_type
