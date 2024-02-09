@@ -1,9 +1,11 @@
 locals {
   name                       = "mysql"
-  region                     = "us-east-2"
-  availability_zone          = "us-east-2a"
+  region                     = "us-east-1"
+  availability_zone          = "us-east-1a"
   family                     = "mysql8.0"
   environment                = "prod"
+  create_namespace           = true
+  namespace                  = "mysql"
   mysql_instance_class       = "db.t3.medium"
   mysql_engine_version       = "8.0.32"
   major_engine_version       = "8.0"
@@ -98,7 +100,7 @@ module "vpc" {
 }
 
 module "rds-mysql" {
-  source                           = "terraform-aws-modules/rds/aws"
+  source                           = "squareops/rds-mysql/aws"
   name                             = local.name
   vpc_id                           = module.vpc.vpc_id
   family                           = local.family
@@ -131,4 +133,33 @@ module "rds-mysql" {
   slack_channel                    = "mysql-notification"
   slack_webhook_url                = "https://hooks/xxxxxxxx"
   custom_user_password             = local.custom_user_password
+}
+
+
+module "backup_restore" {
+  depends_on             = [module.rds-mysql]
+  source                 = "../../modules/backup-restore"
+  cluster_name           = "prod-eks"
+  mysqldb_backup_enabled = true
+  namespace              = local.namespace
+  bucket_provider_type   = "s3"
+  mysqldb_backup_config = {
+    db_username          = module.rds-mysql.db_instance_username
+    db_password          = module.rds-mysql.db_instance_password
+    mysql_database_name  = ""    
+    s3_bucket_region     = "us-east-1"              
+    cron_for_full_backup = "*/3 * * * *"              
+    bucket_uri           = "s3://mysql-rds-backup-store/" 
+    db_endpoint          = replace(module.rds-mysql.db_instance_endpoint, ":3306", "")
+  }
+
+  mysqldb_restore_enabled = true
+  mysqldb_restore_config = {
+    db_endpoint      = replace(module.rds-mysql.db_instance_endpoint, ":3306", "")
+    db_username      = module.rds-mysql.db_instance_username
+    db_password      = module.rds-mysql.db_instance_password
+    bucket_uri       = "s3://mysql-rds-backup-store/mysqldump_20240209_063929.zip" 
+    file_name        = "mysqldump_20240209_063929.zip"                         
+    s3_bucket_region = "us-east-1"                                
+  }
 }
