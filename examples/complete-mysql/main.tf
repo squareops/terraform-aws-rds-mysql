@@ -105,6 +105,7 @@ module "rds-mysql" {
   vpc_id                           = module.vpc.vpc_id
   family                           = local.family
   availability_zone                = local.availability_zone
+  allowed_security_groups          = local.allowed_security_groups
   multi_az                         = false
   subnet_ids                       = module.vpc.database_subnets
   db_name                          = "testdb"
