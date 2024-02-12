@@ -143,6 +143,7 @@ module "backup_restore" {
   cluster_name           = "prod-eks"
   mysqldb_backup_enabled = true
   namespace              = local.namespace
+  create_namespace       = local.create_namespace
   bucket_provider_type   = "s3"
   mysqldb_backup_config = {
     db_username          = module.rds-mysql.db_instance_username
