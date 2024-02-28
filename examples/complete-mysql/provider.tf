@@ -6,11 +6,11 @@ provider "aws" {
 }
 
 data "aws_eks_cluster" "cluster" {
-  name = "prod-eks"
+  name = "proddd-eks"
 
 }
 data "aws_eks_cluster_auth" "cluster" {
-  name = "prod-eks"
+  name = "proddd-eks"
 }
 
 provider "kubernetes" {

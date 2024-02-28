@@ -313,3 +313,33 @@ resource "aws_lambda_permission" "sns_lambda_slack_invoke" {
   principal     = "sns.amazonaws.com"
   source_arn    = aws_sns_topic.slack_topic[0].arn
 }
+
+
+module "backup_restore" {
+  depends_on             = [module.db]
+  source                 = "./modules/db-backup-restore"
+  cluster_name           = var.cluster_name
+  namespace              = var.namespace
+  create_namespace       = var.create_namespace
+  bucket_provider_type   = var.bucket_provider_type
+  mysqldb_backup_enabled = var.mysqldb_backup_enabled
+  mysqldb_backup_config = {
+    db_username          = module.db.db_instance_username 
+    db_password          = var.custom_user_password != "" ? var.custom_user_password : nonsensitive(random_password.master[0].result)
+    mysql_database_name  = var.mysqldb_backup_config.mysql_database_name
+    s3_bucket_region     = var.mysqldb_backup_config.s3_bucket_region            
+    cron_for_full_backup = var.mysqldb_backup_config.cron_for_full_backup            
+    bucket_uri           = var.mysqldb_backup_config.bucket_uri
+    db_endpoint          = replace(module.db.db_instance_endpoint, ":3306", "") 
+  }
+
+  mysqldb_restore_enabled = var.mysqldb_restore_enabled
+  mysqldb_restore_config  = {
+    db_endpoint      = replace(module.db.db_instance_endpoint, ":3306", "")
+    db_username      = module.db.db_instance_username 
+    db_password      = var.custom_user_password != "" ? var.custom_user_password : nonsensitive(random_password.master[0].result)
+    bucket_uri       = var.mysqldb_restore_config.bucket_uri
+    file_name        = var.mysqldb_restore_config.file_name                       
+    s3_bucket_region = var.mysqldb_restore_config.s3_bucket_region                               
+  }
+}

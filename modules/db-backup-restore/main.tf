@@ -9,7 +9,7 @@ resource "kubernetes_namespace" "mysqldb" {
 resource "helm_release" "mysqldb_backup" {
   count      = var.mysqldb_backup_enabled ? 1 : 0
   name       = "mysqldb-backup"
-  chart      = "../../modules/backup-restore/backup"
+  chart      = "../../modules/db-backup-restore/backup"
   timeout    = 600
   namespace  = var.namespace
   values = [
@@ -36,7 +36,7 @@ resource "helm_release" "mysqldb_backup" {
 resource "helm_release" "mysqldb_restore" {
   count      = var.mysqldb_restore_enabled ? 1 : 0
   name       = "mysqldb-restore"
-  chart      = "../../modules/backup-restore/restore"
+  chart      = "../../modules/db-backup-restore/restore"
   timeout    = 600
   namespace  = var.namespace
   values = [

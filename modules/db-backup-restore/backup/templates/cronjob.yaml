@@ -36,5 +36,5 @@ spec:
             - name: BUCKET_PROVIDER
               value:  {{ .Values.backup.provider }}
             - name: AWS_DEFAULT_REGION
-              value: "us-east-1"
+              value: {{ .Values.backup.aws_default_region}}
             resources: {{ .Values.backupjob.resources | toYaml | nindent 12 }}
