@@ -1,0 +1,53 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: restore
+spec:
+  template:
+    spec:
+      affinity: {{ .Values.affinity | toYaml | nindent 6 }}
+      serviceAccountName: sa-mysql-restore
+      containers:
+        - name: restore-mysqldb
+          image: squareops/mysqldb-restore:v5
+          imagePullPolicy: Always
+          env:
+            - name: MYSQL_HOST
+              value: {{ .Values.restore.database_endpoint }}
+            - name: DATABASES
+              value: {{ .Values.restore.database_name }}
+            - name: MYSQL_USER
+              value: {{ .Values.restore.database_user }}
+            - name: MYSQL_PASSWORD
+              value: {{ .Values.restore.database_password }}
+            - name: MYSQL_BUCKET_RESTORE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-bucket-uri-restore
+                  key: MYSQL_BUCKET_URI
+            - name: RESTORE_FILE_NAME
+              value: {{ .Values.restore.file_name}}
+            - name: RESTORE_FROM
+              value: {{ .Values.restore.bucket_provider}}
+            - name: AWS_DEFAULT_REGION
+              value: {{ .Values.restore.aws_default_region}}
+          resources: {{ .Values.restorejob.resources | toYaml | nindent 12 }}
+        - name: grant-system-variable-admin
+          image: mysql:8.0
+          command:
+            - /bin/bash
+            - -c
+            - |
+              # Connect to the MySQL server using the MySQL client
+              mysql -h "$MYSQL_HOST" -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" -e "GRANT SYSTEM_VARIABLES_ADMIN ON *.* TO 'admin'@'%'; FLUSH PRIVILEGES;"
+              # Exit with status code 0 to indicate success
+              exit 0
+          env:
+            - name: MYSQL_HOST
+              value: {{ .Values.restore.database_endpoint }}
+            - name: MYSQL_USER
+              value: {{ .Values.restore.database_user }}
+            - name: MYSQL_PASSWORD
+              value: {{ .Values.restore.database_password }}
+      restartPolicy: Never
+  backoffLimit: 4

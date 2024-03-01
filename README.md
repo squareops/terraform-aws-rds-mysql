@@ -70,6 +70,8 @@ The required IAM permissions to create resources from this module can be found [
 ## Important Note
 1. By default, the variable `create_random_password` is set to true. Therefore, even if the user provides a password, it will not be read. The `create_random_password` variable should be set to false and the `password` variable should have a non-null value to be read and used.
 
+2. To make a backup and restore of RDS MySQL, you need to have a Kubernetes cluster set up in the cloud. This cluster will run a Kubernetes job that handles the backup and restore tasks. 
+
 ## Security & Compliance [<img src="	https://prowler.pro/wp-content/themes/prowler-pro/assets/img/logo.svg" width="250" align="right" />](https://prowler.pro/)
 
 Security scanning is graciously provided by Prowler. Proowler is the leading fully hosted, cloud-native solution providing continuous cluster security and compliance.

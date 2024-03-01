@@ -1,0 +1,48 @@
+primary:
+    affinity:
+        nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                    - key: "Addons-Services"
+                      operator: In
+                      values:
+                      - "true"
+
+secondary:
+    affinity:
+        nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                    - key: "Addons-Services"
+                      operator: In
+                      values:
+                      - "true"
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: "Addons-Services"
+            operator: In
+            values:
+            - "true"
+backupjob:
+  resources:
+    requests:
+      memory: 100Mi
+      cpu: 50m
+    limits:
+      memory: 200Mi
+      cpu: 100m
+
+restorejob:
+  resources:
+    requests:
+      memory: 100Mi
+      cpu: 50m
+    limits:
+      memory: 200Mi
+      cpu: 100m
