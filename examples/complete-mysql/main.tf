@@ -6,10 +6,10 @@ locals {
   environment                = "prod"
   create_namespace           = true
   namespace                  = "mysql"
-  mysql_instance_class       = "db.t2.medium"
+  mysql_instance_class       = "db.t3.micro"
   mysql_engine_version       = "8.0.32"
   major_engine_version       = "8.0"
-  allowed_security_groups    = ["sg-04c7d90aa0c0b5886"]
+  allowed_security_groups    = ["sg-0ad2e895cd6ab3ba3"]
   vpc_cidr                   = "10.10.0.0/16" 
   current_identity           = data.aws_caller_identity.current.arn
   custom_user_password       = ""
@@ -102,7 +102,7 @@ module "vpc" {
 module "rds-mysql" {
   source                           = "../../"
   name                             = local.name
-  vpc_id                         = module.vpc.vpc_id
+  vpc_id                           = module.vpc.vpc_id
   family                           = local.family
   availability_zone                = local.availability_zone
   allowed_security_groups          = local.allowed_security_groups
@@ -114,7 +114,7 @@ module "rds-mysql" {
   engine_version                   = local.mysql_engine_version
   instance_class                   = local.mysql_instance_class
   master_username                  = "admin"
-  storage_type                     = "gp3" 
+  storage_type                     = "gp2" 
   allocated_storage                = 20
   max_allocated_storage            = 120
   rds_instance_name                = local.name
@@ -134,7 +134,7 @@ module "rds-mysql" {
   slack_channel                    = "mysql-notification"
   slack_webhook_url                = "https://hooks/xxxxxxxx"
   custom_user_password             = local.custom_user_password
-  cluster_name                     = "proddd-eks"
+  cluster_name                     = "upgrade-eks"
   namespace              = local.namespace
   create_namespace       = local.create_namespace
   mysqldb_backup_enabled = false
@@ -147,8 +147,8 @@ module "rds-mysql" {
   }
   mysqldb_restore_enabled = false
   mysqldb_restore_config = {
-    bucket_uri       = "s3://mysql-rds-backup-store/mysqldump_20240228_090928.zip"
-    file_name        = "mysqldump_20240228_090928.zip"
+    bucket_uri       = "s3://mysql-rds-backup-store/mysqldump_20240605_094648.zip"
+    file_name        = "mysqldump_20240605_094648.zip"
     s3_bucket_region = "us-east-1"
   }
 }
