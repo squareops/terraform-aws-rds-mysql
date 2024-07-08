@@ -100,7 +100,7 @@ module "vpc" {
 }
 
 module "rds-mysql" {
-  source                           = "squareops/terraform-aws-rds-mysql"
+  source                           = "squareops/rds-mysql/aws"
   name                             = local.name
   vpc_id                           = module.vpc.vpc_id
   family                           = local.family
