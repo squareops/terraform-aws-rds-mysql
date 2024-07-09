@@ -6,11 +6,11 @@ provider "aws" {
 }
 
 data "aws_eks_cluster" "cluster" {
-  name = "upgrade-eks"
+  name = ""
 
 }
 data "aws_eks_cluster_auth" "cluster" {
-  name = "upgrade-eks"
+  name = ""
 }
 
 provider "kubernetes" {

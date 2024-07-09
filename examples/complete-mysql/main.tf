@@ -1,7 +1,7 @@
 locals {
   name                       = "mysql"
-  region                     = "us-east-1"
-  availability_zone          = "us-east-1a"
+  region                     = "us-west-1"
+  availability_zone          = "us-west-1a"
   family                     = "mysql8.0"
   environment                = "prod"
   create_namespace           = true
@@ -9,7 +9,7 @@ locals {
   mysql_instance_class       = "db.t3.micro"
   mysql_engine_version       = "8.0.32"
   major_engine_version       = "8.0"
-  allowed_security_groups    = ["sg-0ad2e895cd6ab3ba3"]
+  allowed_security_groups    = ["sg-abcde12345"]
   vpc_cidr                   = "10.10.0.0/16" 
   current_identity           = data.aws_caller_identity.current.arn
   custom_user_password       = ""
@@ -134,21 +134,21 @@ module "rds-mysql" {
   slack_channel                    = "mysql-notification"
   slack_webhook_url                = "https://hooks/xxxxxxxx"
   custom_user_password             = local.custom_user_password
-  cluster_name                     = "upgrade-eks"
+  cluster_name                     = "" # cluster name
   namespace              = local.namespace
   create_namespace       = local.create_namespace
   mysqldb_backup_enabled = false
   bucket_provider_type   = "s3"
   mysqldb_backup_config = {
     mysql_database_name  = ""
-    s3_bucket_region     = "us-east-1"
+    s3_bucket_region     = "us-west-1"
     cron_for_full_backup = "*/3 * * * *"
     bucket_uri           = "s3://mysql-rds-backup-store/"
   }
   mysqldb_restore_enabled = false
   mysqldb_restore_config = {
-    bucket_uri       = "s3://mysql-rds-backup-store/mysqldump_20240605_094648.zip"
-    file_name        = "mysqldump_20240605_094648.zip"
-    s3_bucket_region = "us-east-1"
+    bucket_uri       = "s3://mysql-rds-backup-store/mysqldump_20240709_071501.zip"
+    file_name        = "mysqldump_20240709_071501.zip"
+    s3_bucket_region = "us-west-1"
   }
 }

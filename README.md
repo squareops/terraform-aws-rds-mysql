@@ -59,6 +59,23 @@ module "rds-mysql" {
   slack_channel                    = "skaf"
   slack_webhook_url                = "https://hooks/xxxxxxxx"
   custom_user_password             = "mysqlpassword"
+  cluster_name                     = "" # cluster name
+  namespace              = local.namespace
+  create_namespace       = local.create_namespace
+  mysqldb_backup_enabled = false
+  bucket_provider_type   = "s3"
+  mysqldb_backup_config = {
+    mysql_database_name  = ""
+    s3_bucket_region     = "us-west-1"
+    cron_for_full_backup = "*/3 * * * *"
+    bucket_uri           = "s3://mysql-rds-backup-store/"
+  }
+  mysqldb_restore_enabled = false
+  mysqldb_restore_config = {
+    bucket_uri       = "s3://mysql-rds-backup-store/mysqldump_20240709_071501.zip"
+    file_name        = "mysqldump_20240709_071501.zip"
+    s3_bucket_region = "us-west-1"
+  }
 }
 
 ```
