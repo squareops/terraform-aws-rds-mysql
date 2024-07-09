@@ -10,7 +10,7 @@ locals {
   mysql_engine_version       = "8.0.32"
   major_engine_version       = "8.0"
   allowed_security_groups    = ["sg-abcde12345"]
-  vpc_cidr                   = "10.10.0.0/16" 
+  vpc_cidr                   = "10.10.0.0/16"
   current_identity           = data.aws_caller_identity.current.arn
   custom_user_password       = ""
   enable_storage_autoscaling = false
@@ -114,7 +114,7 @@ module "rds-mysql" {
   engine_version                   = local.mysql_engine_version
   instance_class                   = local.mysql_instance_class
   master_username                  = "admin"
-  storage_type                     = "gp2" 
+  storage_type                     = "gp3"
   allocated_storage                = 20
   max_allocated_storage            = 120
   rds_instance_name                = local.name
@@ -135,10 +135,10 @@ module "rds-mysql" {
   slack_webhook_url                = "https://hooks/xxxxxxxx"
   custom_user_password             = local.custom_user_password
   cluster_name                     = "" # cluster name
-  namespace              = local.namespace
-  create_namespace       = local.create_namespace
-  mysqldb_backup_enabled = false
-  bucket_provider_type   = "s3"
+  namespace                        = local.namespace
+  create_namespace                 = local.create_namespace
+  mysqldb_backup_enabled           = false
+  bucket_provider_type             = "s3"
   mysqldb_backup_config = {
     mysql_database_name  = ""
     s3_bucket_region     = "us-west-1"
