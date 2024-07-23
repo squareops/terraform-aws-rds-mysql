@@ -1,4 +1,7 @@
 locals {
+  db_password = var.custom_user_password != "" ? var.custom_user_password : (
+    length(random_password.master) > 0 ? element(random_password.master, 0).result : var.custom_user_password
+  )
   tags = {
     Environment = var.environment
   }
@@ -9,7 +12,7 @@ module "db" {
   version                                = "6.1.0"
   identifier                             = format("%s-%s", var.environment, var.rds_instance_name)
   db_name                                = var.db_name
-  password                               = var.custom_user_password != "" ? var.custom_user_password : var.manage_master_user_password ? null : length(random_password.master) > 0 ? random_password.master[0].result : null
+  password                               = local.db_password
   username                               = var.master_username
   port                                   = var.port
   engine                                 = var.engine
@@ -149,7 +152,7 @@ module "security_group_rds" {
 }
 
 resource "aws_secretsmanager_secret" "secret_master_db" {
-  name = format("%s/%s/%s", var.environment, var.rds_instance_name, "rds-mysql-pass")
+  name = format("%s/%s/%s", var.environment, var.rds_instance_name, "rds-mysql")
   tags = merge(
     { "Name" = format("%s/%s/%s", var.environment, var.rds_instance_name, "rds-mysql-pass") },
     local.tags,
@@ -163,16 +166,13 @@ resource "random_password" "master" {
 }
 
 resource "aws_secretsmanager_secret_version" "rds_credentials" {
-  count         = length(random_password.master) > 0 ? 1 : 0
-  secret_id     = aws_secretsmanager_secret.secret_master_db.id
-  secret_string = <<EOF
-{
-  "username": "${module.db.db_instance_username}",
-  "password": length(random_password.master) > 0 ? element(random_password.master, 0).result : var.custom_password,
-  "engine": "${var.engine}",
-  "host": "${module.db.db_instance_endpoint}"
-}
-EOF
+  secret_id = aws_secretsmanager_secret.secret_master_db.id
+  secret_string = jsonencode({
+    username = module.db.db_instance_username
+    password = local.db_password
+    engine   = var.engine
+    host     = module.db.db_instance_endpoint
+  })
 }
 
 # Cloudwatch alarms
@@ -313,7 +313,6 @@ resource "aws_lambda_permission" "sns_lambda_slack_invoke" {
   principal     = "sns.amazonaws.com"
   source_arn    = aws_sns_topic.slack_topic[0].arn
 }
-
 
 module "backup_restore" {
   depends_on             = [module.db]
