@@ -1,7 +1,7 @@
 locals {
   name                       = "mysql"
-  region                     = "us-west-1"
-  availability_zone          = "us-west-1a"
+  region                     = "us-east-1"
+  availability_zone          = "us-east-1a"
   family                     = "mysql8.0"
   environment                = "prod"
   create_namespace           = true
@@ -9,7 +9,7 @@ locals {
   mysql_instance_class       = "db.t3.micro"
   mysql_engine_version       = "8.0.32"
   major_engine_version       = "8.0"
-  allowed_security_groups    = ["sg-abcde12345"]
+  allowed_security_groups    = ["sg-xxxxxxxxxxxxxx"]
   vpc_cidr                   = "10.10.0.0/16"
   current_identity           = data.aws_caller_identity.current.arn
   custom_user_password       = ""
@@ -90,7 +90,7 @@ module "vpc" {
   name                    = local.name
   vpc_cidr                = local.vpc_cidr
   environment             = local.environment
-  availability_zones      = ["us-east-2a", "us-east-2b"]
+  availability_zones      = ["us-east-1a", "us-east-1b"]
   public_subnet_enabled   = true
   auto_assign_public_ip   = true
   intra_subnet_enabled    = false
@@ -147,8 +147,8 @@ module "rds-mysql" {
   }
   mysqldb_restore_enabled = false
   mysqldb_restore_config = {
-    bucket_uri       = "s3://mysql-rds-backup-store/mysqldump_20240709_071501.zip"
-    file_name        = "mysqldump_20240709_071501.zip"
+    bucket_uri       = "s3://mysql-rds-backup-store/mysqldump_20240723_074237.zip"
+    file_name        = "mysqldump_20240723_074237.zip"
     s3_bucket_region = "us-west-1"
   }
 }
