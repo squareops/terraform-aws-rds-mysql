@@ -1,17 +1,19 @@
 locals {
   name                       = "mysql"
-  region                     = "us-east-2"
-  availability_zone          = "us-east-2a"
+  region                     = "us-east-1"
+  availability_zone          = "us-east-1a"
   family                     = "mysql8.0"
   environment                = "prod"
-  mysql_instance_class       = "db.t3.medium"
+  create_namespace           = true
+  namespace                  = "mysql"
+  mysql_instance_class       = "db.t3.micro"
   mysql_engine_version       = "8.0.32"
   major_engine_version       = "8.0"
-  allowed_security_groups    = ["sg-0ef14212995d67a2d"]
+  allowed_security_groups    = ["sg-xxxxxxxxxxxxxx"]
   vpc_cidr                   = "10.10.0.0/16"
   current_identity           = data.aws_caller_identity.current.arn
   custom_user_password       = ""
-  enable_storage_autoscaling = true
+  enable_storage_autoscaling = false
   additional_tags = {
     Owner      = "Organization_Name"
     Expires    = "Never"
@@ -88,7 +90,7 @@ module "vpc" {
   name                    = local.name
   vpc_cidr                = local.vpc_cidr
   environment             = local.environment
-  availability_zones      = ["us-east-2a", "us-east-2b"]
+  availability_zones      = ["us-east-1a", "us-east-1b"]
   public_subnet_enabled   = true
   auto_assign_public_ip   = true
   intra_subnet_enabled    = false
@@ -98,11 +100,12 @@ module "vpc" {
 }
 
 module "rds-mysql" {
-  source                           = "terraform-aws-modules/rds/aws"
+  source                           = "squareops/rds-mysql/aws"
   name                             = local.name
   vpc_id                           = module.vpc.vpc_id
   family                           = local.family
   availability_zone                = local.availability_zone
+  allowed_security_groups          = local.allowed_security_groups
   multi_az                         = false
   subnet_ids                       = module.vpc.database_subnets
   db_name                          = "testdb"
@@ -123,7 +126,7 @@ module "rds-mysql" {
   maintenance_window               = "Mon:00:00-Mon:03:00"
   deletion_protection              = false
   final_snapshot_identifier_prefix = "prod-snapshot"
-  cloudwatch_metric_alarms_enabled = true
+  cloudwatch_metric_alarms_enabled = false
   alarm_cpu_threshold_percent      = 70
   disk_free_storage_space          = "10000000" # in bytes
   slack_notification_enabled       = false
@@ -131,4 +134,21 @@ module "rds-mysql" {
   slack_channel                    = "mysql-notification"
   slack_webhook_url                = "https://hooks/xxxxxxxx"
   custom_user_password             = local.custom_user_password
+  cluster_name                     = "" # cluster name
+  namespace                        = local.namespace
+  create_namespace                 = local.create_namespace
+  mysqldb_backup_enabled           = false
+  bucket_provider_type             = "s3"
+  mysqldb_backup_config = {
+    mysql_database_name  = ""
+    s3_bucket_region     = "us-west-1"
+    cron_for_full_backup = "*/3 * * * *"
+    bucket_uri           = "s3://mysql-rds-backup-store/"
+  }
+  mysqldb_restore_enabled = false
+  mysqldb_restore_config = {
+    bucket_uri       = "s3://mysql-rds-backup-store/mysqldump_20240723_074237.zip"
+    file_name        = "mysqldump_20240723_074237.zip"
+    s3_bucket_region = "us-west-1"
+  }
 }

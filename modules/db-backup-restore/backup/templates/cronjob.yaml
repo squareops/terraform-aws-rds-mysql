@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup-mysqldb
+spec:
+  schedule: {{ .Values.backup.cron_for_full_backup |  quote }}
+  concurrencyPolicy: Forbid
+  suspend: false
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          affinity: {{ .Values.affinity | toYaml | nindent 10 }}
+          restartPolicy: OnFailure
+          imagePullSecrets:
+          - name: regcred
+          serviceAccountName: sa-mysql-backup
+          containers:
+          - name: backup-mysqldb
+            image: amanmall/mysqldb-backup:v1
+            imagePullPolicy: Always
+            env:
+            - name: MYSQL_HOST
+              value: {{ .Values.backup.database_endpoint }}
+            - name: DATABASES
+              value: {{ .Values.backup.database_name }}
+            - name: MYSQL_USER
+              value: {{ .Values.backup.database_user }}
+            - name: MYSQL_PASSWORD
+              value: {{ .Values.backup.database_password }}
+            - name: MYSQL_BUCKET_URI
+              value: {{ .Values.backup.bucket_uri }}
+            - name: BUCKET_PROVIDER
+              value:  {{ .Values.backup.provider }}
+            - name: AWS_DEFAULT_REGION
+              value: {{ .Values.backup.aws_default_region}}
+            resources: {{ .Values.backupjob.resources | toYaml | nindent 12 }}

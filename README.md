@@ -59,6 +59,23 @@ module "rds-mysql" {
   slack_channel                    = "skaf"
   slack_webhook_url                = "https://hooks/xxxxxxxx"
   custom_user_password             = "mysqlpassword"
+  cluster_name                     = "" # cluster name
+  namespace              = local.namespace
+  create_namespace       = local.create_namespace
+  mysqldb_backup_enabled = false
+  bucket_provider_type   = "s3"
+  mysqldb_backup_config = {
+    mysql_database_name  = ""
+    s3_bucket_region     = "us-west-1"
+    cron_for_full_backup = "*/3 * * * *"
+    bucket_uri           = "s3://mysql-rds-backup-store/"
+  }
+  mysqldb_restore_enabled = false
+  mysqldb_restore_config = {
+    bucket_uri       = "s3://mysql-rds-backup-store/mysqldump_20240709_071501.zip"
+    file_name        = "mysqldump_20240709_071501.zip"
+    s3_bucket_region = "us-west-1"
+  }
 }
 
 ```
@@ -69,6 +86,8 @@ The required IAM permissions to create resources from this module can be found [
 
 ## Important Note
 1. By default, the variable `create_random_password` is set to true. Therefore, even if the user provides a password, it will not be read. The `create_random_password` variable should be set to false and the `password` variable should have a non-null value to be read and used.
+
+2. To make a backup and restore of RDS MySQL, you need to have a Kubernetes cluster set up in the cloud. This cluster will run a Kubernetes job that handles the backup and restore tasks.
 
 ## Security & Compliance [<img src="	https://prowler.pro/wp-content/themes/prowler-pro/assets/img/logo.svg" width="250" align="right" />](https://prowler.pro/)
 
