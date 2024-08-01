@@ -9,11 +9,11 @@ resource "kubernetes_namespace" "mysqldb" {
 resource "helm_release" "mysqldb_backup" {
   count      = var.mysqldb_backup_enabled ? 1 : 0
   name       = "mysqldb-backup"
-  chart      = "../../modules/db-backup-restore/backup"
+  chart      = "${path.module}/../../modules/db-backup-restore/backup"
   timeout    = 600
   namespace  = var.namespace
   values = [
-    templatefile("../../helm/values/backup/values.yaml", {
+    templatefile("${path.module}/../../helm/values/backup/values.yaml", {
       bucket_uri                 = var.mysqldb_backup_config.bucket_uri,
       mysql_database_name        = var.bucket_provider_type == "s3" ? var.mysqldb_backup_config.mysql_database_name : "",
       db_endpoint                = var.bucket_provider_type == "s3" ? var.mysqldb_backup_config.db_endpoint : "",
@@ -36,11 +36,11 @@ resource "helm_release" "mysqldb_backup" {
 resource "helm_release" "mysqldb_restore" {
   count      = var.mysqldb_restore_enabled ? 1 : 0
   name       = "mysqldb-restore"
-  chart      = "../../modules/db-backup-restore/restore"
+  chart      = "${path.module}/../../modules/db-backup-restore/restore"
   timeout    = 600
   namespace  = var.namespace
   values = [
-    templatefile("../../helm/values/restore/values.yaml", {
+    templatefile("${path.module}/../../helm/values/restore/values.yaml", {
       bucket_uri                 = var.mysqldb_restore_config.bucket_uri,
       file_name                  = var.mysqldb_restore_config.file_name,
       s3_bucket_region           = var.bucket_provider_type == "s3" ? var.mysqldb_restore_config.s3_bucket_region : "",

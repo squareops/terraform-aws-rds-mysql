@@ -142,7 +142,7 @@ module "rds-mysql" {
   mysqldb_backup_config = {
     mysql_database_name  = ""
     s3_bucket_region     = "us-west-1"
-    cron_for_full_backup = "*/3 * * * *"
+    cron_for_full_backup = "0 */6 * * *"
     bucket_uri           = "s3://mysql-rds-backup-store/"
   }
   mysqldb_restore_enabled = false
