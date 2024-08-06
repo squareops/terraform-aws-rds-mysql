@@ -317,6 +317,7 @@ resource "aws_lambda_permission" "sns_lambda_slack_invoke" {
 module "backup_restore" {
   depends_on             = [module.db]
   source                 = "./modules/db-backup-restore"
+  name                   = var.name
   cluster_name           = var.cluster_name
   namespace              = var.namespace
   create_namespace       = var.create_namespace
