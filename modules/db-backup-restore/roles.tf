@@ -13,6 +13,7 @@ data "aws_eks_cluster" "kubernetes_cluster" {
 }
 
 resource "aws_iam_role" "mysql_backup_role" {
+  count      = var.mysqldb_backup_enabled ? 1 : 0
   name = format("%s-%s-%s", var.cluster_name, var.name, "mysql-backup-rds")
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -56,6 +57,7 @@ resource "aws_iam_role" "mysql_backup_role" {
 
 
 resource "aws_iam_role" "mysql_restore_role" {
+  count      = var.mysqldb_restore_enabled ? 1 : 0
   name = format("%s-%s-%s", var.cluster_name, var.name, "mysql-restore")
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
