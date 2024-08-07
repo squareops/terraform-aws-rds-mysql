@@ -32,6 +32,7 @@ spec:
             - name: AWS_DEFAULT_REGION
               value: {{ .Values.restore.aws_default_region}}
           resources: {{ .Values.restorejob.resources | toYaml | nindent 12 }}
+      initContainers:
         - name: grant-system-variable-admin
           image: mysql:8.0
           command:
