@@ -26,7 +26,7 @@ resource "helm_release" "mysqldb_backup" {
       azure_storage_account_name = var.bucket_provider_type == "azure" ? var.azure_storage_account_name : ""
       azure_storage_account_key  = var.bucket_provider_type == "azure" ? var.azure_storage_account_key : ""
       azure_container_name       = var.bucket_provider_type == "azure" ? var.azure_container_name : ""
-      annotations                = var.bucket_provider_type == "s3" ? "eks.amazonaws.com/role-arn: ${aws_iam_role.mysql_backup_role.arn}" : "iam.gke.io/gcp-service-account: ${var.service_account_backup}"
+      annotations                = var.bucket_provider_type == "s3" ? "eks.amazonaws.com/role-arn: ${aws_iam_role.mysql_backup_role[count.index].arn}" : "iam.gke.io/gcp-service-account: ${var.service_account_backup}"
     })
   ]
 }
@@ -52,7 +52,7 @@ resource "helm_release" "mysqldb_restore" {
       azure_storage_account_name = var.bucket_provider_type == "azure" ? var.azure_storage_account_name : ""
       azure_storage_account_key  = var.bucket_provider_type == "azure" ? var.azure_storage_account_key : ""
       azure_container_name       = var.bucket_provider_type == "azure" ? var.azure_container_name : ""
-      annotations                = var.bucket_provider_type == "s3" ? "eks.amazonaws.com/role-arn: ${aws_iam_role.mysql_restore_role.arn}" : "iam.gke.io/gcp-service-account: ${var.service_account_restore}"
+      annotations                = var.bucket_provider_type == "s3" ? "eks.amazonaws.com/role-arn: ${aws_iam_role.mysql_restore_role[count.index].arn}" : "iam.gke.io/gcp-service-account: ${var.service_account_restore}"
     })
   ]
 }

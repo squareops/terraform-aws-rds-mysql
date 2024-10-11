@@ -32,6 +32,7 @@ spec:
             - name: AWS_DEFAULT_REGION
               value: {{ .Values.restore.aws_default_region}}
           resources: {{ .Values.restorejob.resources | toYaml | nindent 12 }}
+      initContainers:
         - name: grant-system-variable-admin
           image: mysql:8.0
           command:
@@ -39,7 +40,7 @@ spec:
             - -c
             - |
               # Connect to the MySQL server using the MySQL client
-              mysql -h "$MYSQL_HOST" -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" -e "GRANT SYSTEM_VARIABLES_ADMIN ON *.* TO 'admin'@'%'; FLUSH PRIVILEGES;"
+              mysql -h "$MYSQL_HOST" -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" -e "GRANT SYSTEM_VARIABLES_ADMIN ON *.* TO '$MYSQL_USER'@'%'; FLUSH PRIVILEGES;"
               # Exit with status code 0 to indicate success
               exit 0
           env:
