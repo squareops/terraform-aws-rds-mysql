@@ -8,6 +8,7 @@ resource "kubernetes_namespace" "mysqldb" {
 
 resource "helm_release" "mysqldb_backup" {
   count      = var.mysqldb_backup_enabled ? 1 : 0
+  depends_on = [kubernetes_namespace.mysqldb]
   name       = "mysqldb-backup"
   chart      = "${path.module}/../../modules/db-backup-restore/backup"
   timeout    = 600
