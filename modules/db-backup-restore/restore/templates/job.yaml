@@ -9,7 +9,7 @@ spec:
       serviceAccountName: sa-mysql-restore
       containers:
         - name: restore-mysqldb
-          image: squareops/mysqldb-restore:v5
+          image: squareops01/rds-mysql-restore:v1
           imagePullPolicy: Always
           env:
             - name: MYSQL_HOST
