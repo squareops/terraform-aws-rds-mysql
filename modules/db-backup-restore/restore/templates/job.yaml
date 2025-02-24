@@ -27,10 +27,6 @@ spec:
                   key: MYSQL_BUCKET_URI
             - name: RESTORE_FILE_NAME
               value: {{ .Values.restore.file_name}}
-            - name: RESTORE_FROM
-              value: {{ .Values.restore.bucket_provider}}
-            - name: AWS_DEFAULT_REGION
-              value: {{ .Values.restore.aws_default_region}}
           resources: {{ .Values.restorejob.resources | toYaml | nindent 12 }}
       initContainers:
         - name: grant-system-variable-admin
