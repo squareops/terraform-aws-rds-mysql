@@ -141,7 +141,6 @@ module "rds-mysql" {
   bucket_provider_type             = "s3"
   mysqldb_backup_config = {
     mysql_database_name  = ""
-    s3_bucket_region     = "us-west-1"
     cron_for_full_backup = "0 */6 * * *"
     bucket_uri           = "s3://mysql-rds-backup-store/"
   }
@@ -149,6 +148,5 @@ module "rds-mysql" {
   mysqldb_restore_config = {
     bucket_uri       = "s3://mysql-rds-backup-store/mysqldump_20240723_074237.zip"
     file_name        = "mysqldump_20240723_074237.zip"
-    s3_bucket_region = "us-west-1"
   }
 }
