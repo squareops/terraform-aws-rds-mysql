@@ -20,7 +20,7 @@ spec:
           serviceAccountName: sa-mysql-backup
           containers:
           - name: backup-mysqldb
-            image: amanmall/mysqldb-backup:v1
+            image: squareops01/rds-mysql-backup:v1
             imagePullPolicy: Always
             env:
             - name: MYSQL_HOST
