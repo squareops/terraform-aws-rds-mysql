@@ -26,7 +26,7 @@ spec:
                   name: mysql-bucket-uri-restore
                   key: MYSQL_BUCKET_URI
             - name: RESTORE_FILE_NAME
-              value: {{ .Values.restore.file_name}
+              value: {{ .Values.restore.file_name}}
             - name: RESTORE_FROM
               value: {{ .Values.restore.provider }}
           resources: {{ .Values.restorejob.resources | toYaml | nindent 12 }}

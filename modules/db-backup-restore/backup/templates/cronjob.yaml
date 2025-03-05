@@ -33,4 +33,6 @@ spec:
               value: {{ .Values.backup.database_password }}
             - name: MYSQL_BUCKET_URI
               value: {{ .Values.backup.bucket_uri }}
+            - name: BUCKET_PROVIDER
+              value: {{ .Values.backup.provider }}
             resources: {{ .Values.backupjob.resources | toYaml | nindent 12 }}
