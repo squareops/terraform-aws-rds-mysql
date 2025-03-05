@@ -9,7 +9,7 @@ spec:
       serviceAccountName: sa-mysql-restore
       containers:
         - name: restore-mysqldb
-          image: squareops/mysqldb-restore:v5
+          image: squareops01/rds-mysql-restore:v1
           imagePullPolicy: Always
           env:
             - name: MYSQL_HOST
@@ -28,9 +28,7 @@ spec:
             - name: RESTORE_FILE_NAME
               value: {{ .Values.restore.file_name}}
             - name: RESTORE_FROM
-              value: {{ .Values.restore.bucket_provider}}
-            - name: AWS_DEFAULT_REGION
-              value: {{ .Values.restore.aws_default_region}}
+              value: {{ .Values.restore.provider }}
           resources: {{ .Values.restorejob.resources | toYaml | nindent 12 }}
       initContainers:
         - name: grant-system-variable-admin

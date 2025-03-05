@@ -9,7 +9,8 @@ locals {
   mysql_instance_class       = "db.t3.micro"
   mysql_engine_version       = "8.0.32"
   major_engine_version       = "8.0"
-  allowed_security_groups    = ["sg-xxxxxxxxxxxxxx"]
+  cluster_name               = ""
+  allowed_security_groups    = ["sg-xxxxxxxxxxx"]
   vpc_cidr                   = "10.10.0.0/16"
   current_identity           = data.aws_caller_identity.current.arn
   custom_user_password       = ""
@@ -101,6 +102,7 @@ module "vpc" {
 
 module "rds-mysql" {
   source                           = "squareops/rds-mysql/aws"
+  version                          = "1.1.7"
   name                             = local.name
   vpc_id                           = module.vpc.vpc_id
   family                           = local.family
@@ -134,21 +136,19 @@ module "rds-mysql" {
   slack_channel                    = "mysql-notification"
   slack_webhook_url                = "https://hooks/xxxxxxxx"
   custom_user_password             = local.custom_user_password
-  cluster_name                     = "" # cluster name
-  namespace                        = local.namespace
-  create_namespace                 = local.create_namespace
+  cluster_name                     = local.cluster_name     # cluster name
+  namespace                        = local.namespace        # namespace
+  create_namespace                 = local.create_namespace # create namespace
   mysqldb_backup_enabled           = false
   bucket_provider_type             = "s3"
   mysqldb_backup_config = {
-    mysql_database_name  = ""
-    s3_bucket_region     = "us-west-1"
-    cron_for_full_backup = "0 */6 * * *"
-    bucket_uri           = "s3://mysql-rds-backup-store/"
+    mysql_database_name  = ""                                # If you want to backup all databases, leave it empty or specify the database name
+    cron_for_full_backup = "*/2 * * * *"                     # Cron expression for full backup
+    bucket_uri           = "s3://my-backup-dumps-databases/" # S3 bucket URI
   }
   mysqldb_restore_enabled = false
   mysqldb_restore_config = {
-    bucket_uri       = "s3://mysql-rds-backup-store/mysqldump_20240723_074237.zip"
-    file_name        = "mysqldump_20240723_074237.zip"
-    s3_bucket_region = "us-west-1"
+    bucket_uri = "s3://my-backup-dumps-databases/mysqldump_20250303_141601.zip" # S3 bucket URI with the backup file
+    file_name  = "mysqldump_20250303_141601.zip"                                # Backup file name
   }
 }
