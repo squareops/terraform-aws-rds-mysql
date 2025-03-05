@@ -6,6 +6,7 @@ restore:
   database_endpoint: "${db_endpoint}"
   database_password: "${db_password}"
   database_user: "${db_username}"
+  provider: "${bucket_provider_type}"
 
 auth:
   username: "${custom_user_username}"
