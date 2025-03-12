@@ -102,6 +102,7 @@ module "vpc" {
 
 module "rds-mysql" {
   source                           = "squareops/rds-mysql/aws"
+  version                         = "1.1.7"
   name                             = local.name
   vpc_id                           = module.vpc.vpc_id
   family                           = local.family
