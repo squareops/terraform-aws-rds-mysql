@@ -4,6 +4,7 @@ locals {
   availability_zone          = "us-east-1a"
   family                     = "mysql8.0"
   environment                = "prod"
+  cluster_name               = ""
   create_namespace           = true
   namespace                  = "mysql"
   mysql_instance_class       = "db.t3.micro"
@@ -134,7 +135,7 @@ module "rds-mysql" {
   slack_channel                    = "mysql-notification"
   slack_webhook_url                = "https://hooks/xxxxxxxx"
   custom_user_password             = local.custom_user_password
-  cluster_name                     = "" # cluster name
+  cluster_name                     = local.cluster_name # cluster name
   namespace                        = local.namespace
   create_namespace                 = local.create_namespace
   mysqldb_backup_enabled           = false
