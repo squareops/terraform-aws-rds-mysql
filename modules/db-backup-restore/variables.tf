@@ -66,9 +66,9 @@ variable "cluster_name" {
 }
 
 variable "mysqldb_permission" {
-  default = false
+  default     = false
   description = "access"
-  type = bool
+  type        = bool
 }
 
 variable "bucket_provider_type" {

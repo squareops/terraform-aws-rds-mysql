@@ -10,7 +10,8 @@ locals {
   mysql_instance_class       = "db.t3.micro"
   mysql_engine_version       = "8.0.32"
   major_engine_version       = "8.0"
-  allowed_security_groups    = ["sg-xxxxxxxxxxxxxx"]
+  cluster_name               = ""
+  allowed_security_groups    = ["sg-xxxxxxxxxxx"]
   vpc_cidr                   = "10.10.0.0/16"
   current_identity           = data.aws_caller_identity.current.arn
   custom_user_password       = ""
@@ -142,14 +143,12 @@ module "rds-mysql" {
   bucket_provider_type             = "s3"
   mysqldb_backup_config = {
     mysql_database_name  = ""
-    s3_bucket_region     = "us-west-1"
     cron_for_full_backup = "0 */6 * * *"
-    bucket_uri           = "s3://mysql-rds-backup-store/"
+    bucket_uri           = "s3://atmosly-rds-backup-test/"
   }
   mysqldb_restore_enabled = false
   mysqldb_restore_config = {
-    bucket_uri       = "s3://mysql-rds-backup-store/mysqldump_20240723_074237.zip"
-    file_name        = "mysqldump_20240723_074237.zip"
-    s3_bucket_region = "us-west-1"
+    bucket_uri = "s3://atmosly-rds-backup-test/"
+    file_name  = "mysqldump_20250312_145032.zip"
   }
 }
