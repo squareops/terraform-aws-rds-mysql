@@ -142,13 +142,13 @@ module "rds-mysql" {
   mysqldb_backup_enabled           = false
   bucket_provider_type             = "s3"
   mysqldb_backup_config = {
-    mysql_database_name  = ""
-    cron_for_full_backup = "0 */6 * * *"
-    bucket_uri           = "s3://atmosly-rds-backup-test/"
+    mysql_database_name  = ""                                       # specify the database name to backup or leave it empty to backup all databases
+    cron_for_full_backup = "0 */6 * * *"                            # cron expression for full backup
+    bucket_uri           = "s3://atmosly-rds-backup-test/"          # s3 bucket uri
   }
   mysqldb_restore_enabled = false
   mysqldb_restore_config = {
-    bucket_uri = "s3://atmosly-rds-backup-test/"
-    file_name  = "mysqldump_20250312_145032.zip"
+    bucket_uri = "s3://atmosly-rds-backup-test/"                     # s3 bucket uri with / at the end
+    file_name  = "mysqldump_20250312_145032.zip"                     # file name to restore , provide only .sql or .zip file                 
   }
 }
