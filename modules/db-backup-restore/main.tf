@@ -7,12 +7,12 @@ resource "kubernetes_namespace" "mysqldb" {
 }
 
 resource "helm_release" "mysqldb_backup" {
-  count     = var.mysqldb_backup_enabled ? 1 : 0
+  count      = var.mysqldb_backup_enabled ? 1 : 0
   depends_on = [kubernetes_namespace.mysqldb]
-  name      = "mysqldb-backup"
-  chart     = "${path.module}/../../modules/db-backup-restore/backup"
-  timeout   = 600
-  namespace = var.namespace
+  name       = "mysqldb-backup"
+  chart      = "${path.module}/../../modules/db-backup-restore/backup"
+  timeout    = 600
+  namespace  = var.namespace
   values = [
     templatefile("${path.module}/../../helm/values/backup/values.yaml", {
       bucket_uri                 = var.mysqldb_backup_config.bucket_uri,
@@ -33,12 +33,12 @@ resource "helm_release" "mysqldb_backup" {
 
 ## DB dump restore
 resource "helm_release" "mysqldb_restore" {
-  count     = var.mysqldb_restore_enabled ? 1 : 0
+  count      = var.mysqldb_restore_enabled ? 1 : 0
   depends_on = [kubernetes_namespace.mysqldb]
-  name      = "mysqldb-restore"
-  chart     = "${path.module}/../../modules/db-backup-restore/restore"
-  timeout   = 600
-  namespace = var.namespace
+  name       = "mysqldb-restore"
+  chart      = "${path.module}/../../modules/db-backup-restore/restore"
+  timeout    = 600
+  namespace  = var.namespace
   values = [
     templatefile("${path.module}/../../helm/values/restore/values.yaml", {
       bucket_uri                 = var.mysqldb_restore_config.bucket_uri,
