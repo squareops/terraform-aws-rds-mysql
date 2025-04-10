@@ -10,7 +10,7 @@ locals {
   mysql_instance_class       = "db.t3.micro"
   mysql_engine_version       = "8.0.32"
   major_engine_version       = "8.0"
-  allowed_security_groups    = ["sg-xxxxxxxxxxx"]
+  allowed_security_groups    = ["sg-xxxxxxxxxxxxxx"]
   vpc_cidr                   = "10.10.0.0/16"
   current_identity           = data.aws_caller_identity.current.arn
   custom_user_password       = ""
