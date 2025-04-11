@@ -4,6 +4,7 @@ locals {
   availability_zone          = "us-east-1a"
   family                     = "mysql8.0"
   environment                = "prod"
+  cluster_name               = ""
   create_namespace           = true
   namespace                  = "mysql"
   mysql_instance_class       = "db.t3.micro"
@@ -101,6 +102,7 @@ module "vpc" {
 
 module "rds-mysql" {
   source                           = "squareops/rds-mysql/aws"
+  version                         = "1.1.8"
   name                             = local.name
   vpc_id                           = module.vpc.vpc_id
   family                           = local.family
@@ -134,21 +136,18 @@ module "rds-mysql" {
   slack_channel                    = "mysql-notification"
   slack_webhook_url                = "https://hooks/xxxxxxxx"
   custom_user_password             = local.custom_user_password
-  cluster_name                     = "" # cluster name
+  cluster_name                     = local.cluster_name # cluster name
   namespace                        = local.namespace
   create_namespace                 = local.create_namespace
   mysqldb_backup_enabled           = false
-  bucket_provider_type             = "s3"
   mysqldb_backup_config = {
-    mysql_database_name  = ""
-    s3_bucket_region     = "us-west-1"
-    cron_for_full_backup = "0 */6 * * *"
-    bucket_uri           = "s3://mysql-rds-backup-store/"
+    mysql_database_name  = ""                                       # specify the database name to backup or leave it empty to backup all databases
+    cron_for_full_backup = "0 */6 * * *"                            # cron expression for full backup
+    bucket_uri           = "s3://atmosly-rds-backup-test/"          # s3 bucket uri with / at the end
   }
   mysqldb_restore_enabled = false
   mysqldb_restore_config = {
-    bucket_uri       = "s3://mysql-rds-backup-store/mysqldump_20240723_074237.zip"
-    file_name        = "mysqldump_20240723_074237.zip"
-    s3_bucket_region = "us-west-1"
+    bucket_uri = "s3://atmosly-rds-backup-test/"                     # s3 bucket uri with / at the end
+    file_name  = "mysqldump_20250312_145032.zip"                     # file name to restore , provide only .sql or .zip file                 
   }
 }

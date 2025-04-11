@@ -1,8 +1,6 @@
 restore:
   file_name: ${file_name}
   bucket_uri: ${bucket_uri}
-  aws_default_region: ${s3_bucket_region}
-  bucket_provider : ${bucket_provider_type}
   database_endpoint: "${db_endpoint}"
   database_password: "${db_password}"
   database_user: "${db_username}"
@@ -13,7 +11,6 @@ auth:
 annotations:
   ${annotations}
 
-bucket_provider_type: ${bucket_provider_type}
 
 affinity:
   nodeAffinity:
