@@ -351,10 +351,8 @@ variable "mysqldb_backup_config" {
   type = map(string)
   default = {
     bucket_uri           = ""
-    s3_bucket_region     = ""
     cron_for_full_backup = ""
     mysql_database_name  = ""
-    # db_endpoint=""
   }
   description = "configuration options for MySQL database backups. It includes properties such as the S3 bucket URI, the S3 bucket region, and the cron expression for full backups."
 }
@@ -364,7 +362,6 @@ variable "mysqldb_restore_config" {
   default = {
     bucket_uri       = ""
     file_name        = ""
-    s3_bucket_region = ""
   }
   description = "Configuration options for restoring dump to the MySQL database."
 }

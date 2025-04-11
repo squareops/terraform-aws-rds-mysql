@@ -1,13 +1,12 @@
 ## Enable Full backup
 backup:
   bucket_uri: ${bucket_uri}
-  aws_default_region: ${s3_bucket_region}
   cron_for_full_backup: "${cron_for_full_backup}"
   database_name: "${mysql_database_name}"
   database_endpoint: "${db_endpoint}"
   database_password: "${db_password}"
   database_user: "${db_username}"
-  provider: "${bucket_provider_type}"
+
 
 
 annotations:
@@ -16,7 +15,6 @@ annotations:
 auth:
   username: "${custom_user_username}"
 
-bucket_provider_type: ${bucket_provider_type}
 
 affinity:
   nodeAffinity:
