@@ -32,7 +32,7 @@ module "rds-mysql" {
   replica_enable                   = false
   replica_count                    = 1
   subnet_ids                       = ["subnet-04cecf2400","subnet-0ac69f821"]
-  family                           = "mysql8.0
+  family                           = "mysql8.0"
   db_name                          = "proddb"
   availability_zone                = "us-east-2a"
   multi_az                         = false
